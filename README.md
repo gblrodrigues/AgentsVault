@@ -37,7 +37,7 @@ Abaixo irei disponibilizar um vídeo mostrando como o aplicativo está:
 ## Tomadas de Decisões
 
 ### Jetpack Compose
-Optei por usar Jetpack Compose porque já vinha estudando a ferramenta e queria aplicá-la em um projeto real. A abordagem declarativa torna a construção da interface mais direta e organizada, além de deixar o código mais legível e fácil de manter.
+Optei por Jetpack Compose por já ter experiência com a abordagem declarativa, que torna a construção da interface mais organizada. Confesso que não sinto falta do XML
 
 ### Arquitetura (MVVM)
 Escolhi estruturar o projeto em MVVM para manter a lógica separada da interface. O uso de ViewModel ajuda no gerenciamento de estado e segue as boas práticas recomendadas no desenvolvimento Android moderno.
