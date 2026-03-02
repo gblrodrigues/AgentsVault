@@ -12,3 +12,6 @@ val Pink40 = Color(0xFF7D5260)
 
 val BackgroundColorOne = Color(0xFFAED8FF)
 val BackgroundColorTwo = Color(0xFF6C8CFF)
+val BackGroundCardColorOne = Color(0xFF5865A8)
+val BackGroundCardColorTwo = Color(0xFF5369CC)
+val ButtonAbilityColor = Color(0xFFFF6A3D)

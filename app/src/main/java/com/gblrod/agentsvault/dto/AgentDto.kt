@@ -5,5 +5,6 @@ data class AgentDto(
     val description: String,
     val displayIcon: String,
     val fullPortrait: String,
-    val role: RoleDto
+    val role: RoleDto,
+    val abilities: List<AbilityDto>
 )
