@@ -1,3 +1,7 @@
+## Demonstração
+Abaixo irei disponibilizar um GIF mostrando como o aplicativo está:
+> https://github.com/user-attachments/assets/1a3037c4-6589-4985-bdc3-e37e4edf24b0
+
 ## ⚖ Aviso Legal
 
 Este projeto foi desenvolvido exclusivamente para fins educacionais e de portfólio.
