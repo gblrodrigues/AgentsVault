@@ -24,8 +24,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -62,34 +64,43 @@ import com.gblrod.agentsvault.viewmodel.AgentViewModel
 fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
     val agents by viewModel.agents.collectAsState()
     var selectAgent by remember { mutableStateOf<AgentDto?>(null) }
+    val currentAgent = selectAgent ?: agents.firstOrNull()
     var showAbilitiesSheet by remember { mutableStateOf(false) }
     // val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
     val scroll = rememberScrollState()
 
-    LaunchedEffect(key1 = agents) {
-        if (agents.isNotEmpty() && selectAgent == null) {
-            selectAgent = agents.first()
-        }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.fetchAgents()
     }
 
-    if (agents.isEmpty()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
+    Box {
 
-            Button(
-                onClick = {
-                    viewModel.fetchAgents()
-                },
+        if (agents.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                BackgroundColorOne,
+                                BackgroundColorTwo
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Text(text = "Carregar Agentes")
+                Text(
+                    text = "Carregando...",
+                    color = Color.Black,
+                    modifier = Modifier.padding(top = 80.dp)
+                )
+                CircularProgressIndicator(color = Color.Black)
             }
+            return
         }
-    } else {
-        selectAgent?.let { agent ->
+
+        currentAgent?.let { agent ->
             Box(
                 modifier = modifier
                     .background(
