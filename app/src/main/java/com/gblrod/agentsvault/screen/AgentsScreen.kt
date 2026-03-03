@@ -196,20 +196,22 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
                         )
                     }
 
-                    Button(
-                        onClick = { showAbilitiesSheet = true },
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .padding(top = 415.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = ButtonAbilityColor
-                        )
-                    ) {
-                        Text(
-                            text = "Exibir Skills",
-                            color = Color.Black
-                        )
+                    if (!showAbilitiesSheet) {
+                        Button(
+                            onClick = { showAbilitiesSheet = true },
+                            modifier = Modifier
+                                .fillMaxWidth(0.5f)
+                                .padding(top = 415.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ButtonAbilityColor
+                            )
+                        ) {
+                            Text(
+                                text = "Exibir Skills",
+                                color = Color.Black
+                            )
+                        }
                     }
                 }
                 AsyncImage(
