@@ -1,5 +1,6 @@
 package com.gblrod.agentsvault.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,12 +46,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.ui.theme.BackGroundCardColorOne
 import com.gblrod.agentsvault.ui.theme.BackGroundCardColorTwo
@@ -75,7 +78,6 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
     }
 
     Box {
-
         if (agents.isEmpty()) {
             Box(
                 modifier = Modifier
@@ -89,7 +91,15 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
                         )
                     ),
                 contentAlignment = Alignment.Center
-            ) {
+            )
+            {
+                Image(
+                    painter = painterResource(id = R.drawable.background),
+                    contentDescription = "Fundo do Aplicativo",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                )
+
                 Text(
                     text = "Carregando...",
                     color = Color.Black,
@@ -101,6 +111,7 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
         }
 
         currentAgent?.let { agent ->
+
             Box(
                 modifier = modifier
                     .background(
