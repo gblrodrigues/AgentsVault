@@ -1,5 +1,6 @@
 package com.gblrod.agentsvault.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +26,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -250,18 +253,28 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
                         .align(Alignment.BottomCenter)
                         .navigationBarsPadding()
                         .padding(bottom = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(17.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp),
                 ) {
                     items(agents) { item ->
-                        AsyncImage(
-                            model = item.displayIcon,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(60.dp)
-                                .clip(CircleShape)
-                                .clickable { selectAgent = item }
-                        )
+                        Card(
+                            border = if (selectAgent == item) BorderStroke(
+                                width = 2.dp,
+                                color = Color.White
+                            ) else null,
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.Transparent
+                            )
+                        ) {
+                            AsyncImage(
+                                model = item.displayIcon,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    //.clip(CircleShape)
+                                    .clickable { selectAgent = item }
+                            )
+                        }
                     }
                 }
             }
