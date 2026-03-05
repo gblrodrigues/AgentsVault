@@ -2,4 +2,8 @@
 <resources>
 
     <style name="Theme.AgentsVault" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.AgentsVault.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+    </style>
 </resources>
