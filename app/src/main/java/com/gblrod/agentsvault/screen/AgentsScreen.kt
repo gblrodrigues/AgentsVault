@@ -1,5 +1,6 @@
 package com.gblrod.agentsvault.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,11 +20,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -32,6 +38,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +46,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,19 +56,30 @@ import com.gblrod.agentsvault.components.AgentBottomSheet
 import com.gblrod.agentsvault.components.AgentSearchBar
 import com.gblrod.agentsvault.components.AgentsLoadingScreen
 import com.gblrod.agentsvault.dto.AgentDto
+import com.gblrod.agentsvault.local.AgentFavoriteDataStore
 import com.gblrod.agentsvault.ui.theme.BackgroundColorOne
 import com.gblrod.agentsvault.ui.theme.BackgroundColorTwo
 import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor
+import com.gblrod.agentsvault.viewmodel.AgentFavoriteViewModel
 import com.gblrod.agentsvault.viewmodel.AgentViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
+fun AgentsScreen(
+    viewModel: AgentViewModel,
+    agentFavoriteViewModel: AgentFavoriteViewModel,
+    agentFavoriteDataStore: AgentFavoriteDataStore,
+    modifier: Modifier = Modifier
+) {
     val agents by viewModel.agents.collectAsState()
     var selectAgent by remember { mutableStateOf<AgentDto?>(null) }
     val currentAgent = selectAgent ?: agents.firstOrNull()
     var showAbilitiesSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val isFavorite by agentFavoriteViewModel.isFavoriteAgent.collectAsState(initial = false)
 
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchAgents()
@@ -73,6 +92,9 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
         }
 
         currentAgent?.let { agent ->
+
+            val favorites by agentFavoriteDataStore.agentFavoriteFlow.collectAsState(initial = null)
+            val agentIsFavorite = favorites?.contains(agent.uuid)
 
             Box(
                 modifier = modifier
@@ -90,7 +112,7 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
                     AgentBottomSheet(
                         agent = agent,
                         sheetState = sheetState,
-                        onDismiss = {showAbilitiesSheet = false}
+                        onDismiss = { showAbilitiesSheet = false }
                     )
                 }
 
@@ -100,7 +122,6 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
                         .padding(top = 165.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
                     Text(
                         text = agent.displayName.uppercase(),
                         fontSize = 32.sp,
@@ -142,6 +163,33 @@ fun AgentsScreen(viewModel: AgentViewModel, modifier: Modifier = Modifier) {
                             Text(
                                 text = "Exibir Skills",
                                 color = Color.Black
+                            )
+                        }
+                    }
+
+                    IconToggleButton(
+                        checked = isFavorite,
+                        onCheckedChange = {
+                            scope.launch {
+                                agentFavoriteDataStore.toggleFavorite(agent.uuid)
+                            }
+
+                            agentIsFavorite?.let {
+                                if (it) {
+                                    Toast.makeText(context,"Agente ${currentAgent.displayName} desfavoritado!", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context,"Agente ${currentAgent.displayName} favoritado!", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    ) {
+
+                        if (!showAbilitiesSheet) {
+                            Icon(
+                                imageVector = if (agentIsFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = "Ícone de favoritar",
+                                tint = if (agentIsFavorite == true) Color.Red else Color.Black,
+                                modifier = Modifier.size(50.dp)
                             )
                         }
                     }
