@@ -20,10 +20,18 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 - Arquitetura MVVM — Organização do projeto utilizando ViewModel para gerenciamento de estado e separação de responsabilidades.
 - [Retrofit](https://square.github.io/retrofit/) — Cliente HTTP para consumo da API REST.
 - [Coil](https://coil-kt.github.io/coil/compose/) — Carregamento assíncrono de imagens via URL (AsyncImage)
+- [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) — Persistência de dados local utilizada para salvar agentes favoritados.
+- [Splash Screen](https://developer.android.com/develop/ui/views/launch/splash-screen) — Tela de abertura com logo e fundo para melhorar a experiência inicial do app.
+- [Navigation](https://developer.android.com/jetpack/compose/navigation) — Gerenciamento de navegação entre telas.
 
 ## Funcionalidades
 
 * Listagem de agentes  
+* Busca de agentes  
+* Favoritar agentes com persistência usando DataStore  
+* Tela dedicada para visualizar agentes favoritados  
+* Splash Screen inicial do aplicativo 
+* Seleção de agentes com indicador visual no card  
 * Exibição de imagem e background personalizado  
 * Classe do agente (Duelista, Controlador, etc.)  
 * Modal Bottom Sheet com habilidades  
@@ -32,7 +40,7 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 
 ## Demonstração
 Abaixo irei disponibilizar um vídeo mostrando como o aplicativo está:
-> https://github.com/user-attachments/assets/1a3037c4-6589-4985-bdc3-e37e4edf24b0
+> https://github.com/user-attachments/assets/94f303d3-9b3f-4cf8-a9b7-f4bbd7d861e1
 
 ## Tomadas de Decisões
 
@@ -52,6 +60,21 @@ Utilizei a biblioteca Coil para carregar imagens via URL de forma assíncrona, g
 ### Material 3
 Material 3 foi escolhido para manter um visual moderno e consistente, aproveitando componentes já bem estruturados e alinhados às diretrizes atuais do Android.
 
+### Persistência de Favoritos (DataStore)
+Para permitir que os agentes favoritados fossem mantidos mesmo após fechar o aplicativo, utilizei DataStore como solução de persistência local. 
+
+### Sistema de Busca (SearchBar)
+Para facilitar a navegação entre os agentes, implementei uma funcionalidade de busca que permite filtrar a lista dinamicamente conforme o nome digitado.
+
+### Seleção de Agentes
+Adicionei um indicador visual no card do agente quando ele é selecionado, facilitando o entendimento visual de qual agente está selecionado.
+
+### Splash Screen
+Implementei uma Splash Screen para criar uma experiência inicial mais polida ao abrir o aplicativo.
+
+### Navegação entre Telas (Navigation)
+Para organizar a navegação entre as telas, utilizei o Navigation. Essa biblioteca facilita muito a definição de rotas e o gerenciamento da navegação.
+
 ## Objetivo do Projeto
 
 Este projeto foi desenvolvido com o objetivo de:
@@ -59,6 +82,7 @@ Este projeto foi desenvolvido com o objetivo de:
 * Praticar consumo de API REST
 * Aprimorar UI com Jetpack Compose
 * Trabalhar com estados e BottomSheet
+* Praticar mais o uso de DataStore
 * Construir portfólio 
 
 ## Contato
