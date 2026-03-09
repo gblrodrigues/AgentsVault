@@ -29,12 +29,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gblrod.agentsvault.dto.AgentDto
+import com.gblrod.agentsvault.local.AgentFavoriteDataStore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AgentSearchBar(
     agents: List<AgentDto>,
-    onAgentSelected: (AgentDto) -> Unit
+    onAgentSelected: (AgentDto) -> Unit,
+    agentFavoriteDataStore: AgentFavoriteDataStore
 ) {
     var query by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
@@ -54,7 +56,7 @@ fun AgentSearchBar(
         modifier = Modifier
             .fillMaxWidth()
             .then(
-                if (!expanded) Modifier.padding(16.dp)
+                if (!expanded) Modifier.padding(16.dp, vertical = 32.dp)
                 else Modifier
             ),
 
@@ -118,7 +120,7 @@ fun AgentSearchBar(
         )
     )
     {
-            LazyColumn {
+        LazyColumn {
                 items(filteredAgents) { agent ->
                     ListItem(
                         headlineContent = {
@@ -146,5 +148,5 @@ fun AgentSearchBar(
                     )
                 }
             }
+        }
     }
-}

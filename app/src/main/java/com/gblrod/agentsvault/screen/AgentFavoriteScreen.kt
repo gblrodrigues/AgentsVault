@@ -25,17 +25,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,75 +51,131 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.gblrod.agentsvault.components.AgentBottomSheet
 import com.gblrod.agentsvault.components.AgentSearchBar
-import com.gblrod.agentsvault.components.AgentsLoadingScreen
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.local.AgentFavoriteDataStore
 import com.gblrod.agentsvault.ui.theme.BackgroundColorOne
 import com.gblrod.agentsvault.ui.theme.BackgroundColorTwo
 import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor
-import com.gblrod.agentsvault.viewmodel.AgentFavoriteViewModel
 import com.gblrod.agentsvault.viewmodel.AgentViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AgentsScreen(
-    viewModel: AgentViewModel,
-    agentFavoriteViewModel: AgentFavoriteViewModel,
-    agentFavoriteDataStore: AgentFavoriteDataStore,
+fun AgentFavoriteScreen(
     onFavoriteScreen: () -> Unit,
+    viewModel: AgentViewModel,
+    agentFavoriteDataStore: AgentFavoriteDataStore,
     modifier: Modifier = Modifier
 ) {
     val agents by viewModel.agents.collectAsState()
+    val idFavorite by agentFavoriteDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
+    val filterFavorite = agents.filter { idFavorite.contains(it.uuid) }
     var selectAgent by remember { mutableStateOf<AgentDto?>(null) }
-    val currentAgent = selectAgent ?: agents.firstOrNull()
+    if (selectAgent != null && !idFavorite.contains(selectAgent!!.uuid)) {
+        selectAgent = null
+    }
+    val currentAgent = selectAgent ?: filterFavorite.firstOrNull()
     var showAbilitiesSheet by remember { mutableStateOf(false) }
+    val agentIsFavorite = idFavorite.contains(currentAgent?.uuid)
+    val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val isFavorite by agentFavoriteViewModel.isFavoriteAgent.collectAsState(initial = false)
+    var backAgentScreen by remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.fetchAgents()
-    }
-
-    Box {
-        if (agents.isEmpty()) {
-            AgentsLoadingScreen()
-            return
-        }
-
-        currentAgent?.let { agent ->
-
-            val favorites by agentFavoriteDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
-            val agentIsFavorite = favorites.contains(agent.uuid)
-
-            Box(
-                modifier = modifier
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                BackgroundColorOne,
-                                BackgroundColorTwo
-                            )
-                        )
+    Box(
+        modifier = modifier
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        BackgroundColorOne,
+                        BackgroundColorTwo
                     )
-                    .fillMaxSize()
-            ) {
-                if (showAbilitiesSheet) {
+                )
+            )
+            .fillMaxSize()
+    ) {
+
+        currentAgent.let { agent ->
+
+            if (showAbilitiesSheet) {
+                agent?.let {
                     AgentBottomSheet(
-                        agent = agent,
+                        agent = it,
                         sheetState = sheetState,
                         onDismiss = { showAbilitiesSheet = false }
                     )
                 }
+            }
 
+            if (filterFavorite.isEmpty() || currentAgent == null) {
+
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Warning,
+                        contentDescription = "Ícone de Sem favorito",
+                        tint = Color.Black,
+                        modifier = Modifier.size(70.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Sem agente favorito",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = "Quando você favoritar agentes, \neles aparecerão aqui.",
+                        color = Color.LightGray,
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = {
+                            onFavoriteScreen()
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(0.6f),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = ButtonAbilityColor
+                        )
+                    ) {
+
+                        Row {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Ícone de Retornar para main",
+                                tint = Color.Black,
+                                modifier = Modifier.padding(horizontal = 7.dp)
+                            )
+
+                            Text(
+                                text = "Favoritar Agentes",
+                                color = Color.Black
+                            )
+                        }
+                    }
+                }
+
+            } else {
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -155,24 +212,34 @@ fun AgentsScreen(
                                     ) {
 
                                         Text(
-                                            text = agent.displayName.uppercase(),
+                                            text = currentAgent.displayName.uppercase(),
                                             fontSize = 32.sp,
                                             fontWeight = FontWeight.Bold,
                                             modifier = Modifier.align(Alignment.Center)
                                         )
 
                                         IconToggleButton(
-                                            checked = isFavorite,
+                                            checked = agentIsFavorite,
                                             onCheckedChange = {
                                                 scope.launch {
-                                                    agentFavoriteDataStore.toggleFavorite(agent.uuid)
+                                                    agentFavoriteDataStore.toggleFavorite(
+                                                        currentAgent.uuid
+                                                    )
                                                 }
 
                                                 agentIsFavorite.let {
                                                     if (it) {
-                                                        Toast.makeText(context,"Agente ${currentAgent.displayName} desfavoritado!", Toast.LENGTH_SHORT).show()
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Agente ${currentAgent.displayName} desfavoritado!",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
                                                     } else {
-                                                        Toast.makeText(context,"Agente ${currentAgent.displayName} favoritado!", Toast.LENGTH_SHORT).show()
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Agente ${currentAgent.displayName} favoritado!",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
                                                     }
                                                 }
                                             },
@@ -198,7 +265,7 @@ fun AgentsScreen(
                                     )
                                     {
                                         AsyncImage(
-                                            model = agent.role.displayIcon,
+                                            model = currentAgent.role.displayIcon,
                                             contentDescription = "Ícone da função",
                                             modifier = modifier.size(14.dp),
                                             colorFilter = ColorFilter.tint(Color.Black)
@@ -206,7 +273,7 @@ fun AgentsScreen(
                                         Spacer(modifier = Modifier.width(6.dp))
 
                                         Text(
-                                            text = agent.role.displayName.uppercase(),
+                                            text = currentAgent.role.displayName.uppercase(),
                                             fontSize = 13.sp,
                                             color = Color.Black,
                                             fontWeight = FontWeight.SemiBold
@@ -230,29 +297,8 @@ fun AgentsScreen(
                                             )
                                         ) {
                                             Text(
-                                                text = "Ver Skills",
+                                                text = "Exibir Skills",
                                                 color = Color.Black
-                                            )
-                                        }
-
-                                        Button(
-                                            onClick = { onFavoriteScreen() },
-                                            modifier = Modifier
-                                                .weight(1f),
-                                            shape = RoundedCornerShape(12.dp),
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = ButtonAbilityColor
-                                            )
-                                        ) {
-                                            Text(
-                                                text = "Favoritos",
-                                                color = Color.Black
-                                            )
-
-                                            Icon(
-                                                imageVector = Icons.Default.Star,
-                                                contentDescription = "Ícone de Favoritos",
-                                                tint = Color.Yellow,
                                             )
                                         }
                                     }
@@ -261,8 +307,9 @@ fun AgentsScreen(
                         }
                     }
                 }
+
                 AsyncImage(
-                    model = agent.fullPortrait,
+                    model = currentAgent.fullPortrait,
                     contentDescription = "Personagem",
                     contentScale = ContentScale.Fit,
                     modifier = modifier
@@ -278,7 +325,7 @@ fun AgentsScreen(
                     horizontalArrangement = Arrangement.spacedBy(17.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp),
                 ) {
-                    items(agents) { item ->
+                    items(filterFavorite) { item ->
                         Card(
                             border = if (currentAgent == item) BorderStroke(
                                 width = 2.dp,
@@ -293,7 +340,6 @@ fun AgentsScreen(
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(60.dp)
-                                    //.clip(CircleShape)
                                     .clickable { selectAgent = item }
                             )
                         }
@@ -301,20 +347,38 @@ fun AgentsScreen(
                 }
             }
         }
-        AgentSearchBar(
-            agents = agents,
-            onAgentSelected = { agent ->
-                selectAgent = agent
-                showAbilitiesSheet = false
-            },
-            agentFavoriteDataStore = agentFavoriteDataStore,
-        )
+        if (filterFavorite.isNotEmpty()) {
+
+            AgentSearchBar(
+                agents = filterFavorite,
+                onAgentSelected = { agent ->
+                    selectAgent = agent
+                    showAbilitiesSheet = false
+                },
+                agentFavoriteDataStore = agentFavoriteDataStore
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 25.dp)
+        ) {
+            IconButton(
+                onClick = {
+                    if (!backAgentScreen) {
+                        backAgentScreen = true
+                        onFavoriteScreen()
+                    }
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Ícone de Retornar para main",
+                    modifier = Modifier.size(30.dp),
+                    tint = Color.Black
+                )
+            }
+        }
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun AgentsScreenPreview() {
-//    AgentsScreen(viewModel = AgentViewModel())
-//}

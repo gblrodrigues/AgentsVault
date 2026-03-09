@@ -69,6 +69,12 @@ dependencies {
     // DataStore
     implementation(libs.androidx.datastore.preferences)
 
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // Material Icons
+    implementation(libs.androidx.compose.material.icons.extended)
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
