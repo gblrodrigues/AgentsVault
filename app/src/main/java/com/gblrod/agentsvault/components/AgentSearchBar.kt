@@ -20,28 +20,46 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gblrod.agentsvault.dto.AgentDto
-import com.gblrod.agentsvault.local.AgentFavoriteDataStore
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AgentSearchBar(
     agents: List<AgentDto>,
-    onAgentSelected: (AgentDto) -> Unit,
-    agentFavoriteDataStore: AgentFavoriteDataStore
+    onAgentSelected: (AgentDto) -> Unit
 ) {
     var query by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     val filteredAgents = agents.filter {
         it.displayName.contains(query, ignoreCase = true)
+    }
+    val filterRandomNameAgent = agents.firstOrNull()?.displayName
+    var placeHolder by remember { mutableStateOf(filterRandomNameAgent) }
+    val currentAgents by rememberUpdatedState(agents)
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(2000)
+            val newAgentName = currentAgents
+                .filter { it.displayName != placeHolder}
+                .randomOrNull()
+                ?.displayName
+
+            if (newAgentName != null) {
+                placeHolder = newAgentName
+            }
+        }
     }
 
     BackHandler(enabled = expanded) {
@@ -72,7 +90,7 @@ fun AgentSearchBar(
                 onExpandedChange = { expanded = it },
                 placeholder = {
                     Text(
-                        text = "Ex: Clove",
+                        text = "Ex: $placeHolder",
                         color = Color.White
                     )
                 },

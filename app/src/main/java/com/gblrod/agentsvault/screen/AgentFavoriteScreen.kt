@@ -355,7 +355,6 @@ fun AgentFavoriteScreen(
                     selectAgent = agent
                     showAbilitiesSheet = false
                 },
-                agentFavoriteDataStore = agentFavoriteDataStore
             )
         }
 

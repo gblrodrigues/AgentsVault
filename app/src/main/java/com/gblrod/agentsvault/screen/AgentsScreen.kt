@@ -98,7 +98,6 @@ fun AgentsScreen(
 
             val favorites by agentFavoriteDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
             val agentIsFavorite = favorites.contains(agent.uuid)
-
             Box(
                 modifier = modifier
                     .background(
@@ -306,8 +305,7 @@ fun AgentsScreen(
             onAgentSelected = { agent ->
                 selectAgent = agent
                 showAbilitiesSheet = false
-            },
-            agentFavoriteDataStore = agentFavoriteDataStore,
+            }
         )
     }
 }
