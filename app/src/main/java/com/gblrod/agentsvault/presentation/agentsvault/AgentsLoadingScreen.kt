@@ -1,4 +1,4 @@
-package com.gblrod.agentsvault.components
+package com.gblrod.agentsvault.presentation.agentsvault
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
