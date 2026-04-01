@@ -40,7 +40,7 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 
 ## Demonstração
 Abaixo irei disponibilizar um vídeo mostrando como o aplicativo está:
-> https://github.com/user-attachments/assets/94f303d3-9b3f-4cf8-a9b7-f4bbd7d861e1
+> https://github.com/user-attachments/assets/cf2c6d30-e55f-492e-b802-1f4e6ab1e15b
 
 ## Tomadas de Decisões
 
@@ -79,10 +79,12 @@ Para organizar a navegação entre as telas, utilizei o Navigation. Essa bibliot
 
 Este projeto foi desenvolvido com o objetivo de:
 
-* Praticar consumo de API REST
-* Aprimorar UI com Jetpack Compose
-* Trabalhar com estados e BottomSheet
-* Praticar mais o uso de DataStore
+* Colocar em prática o consumo de API REST e o tratamento dos dados recebidos
+* Evoluir na construção de interfaces usando Jetpack Compose
+* Trabalhar melhor com gerenciamento de estado utilizando ViewModel
+* Explorar interações de UI como BottomSheet
+* Utilizar DataStore para salvar dados localmente
+* Aplicar boas práticas de organização e arquitetura (MVVM e feature-first)
 * Construir portfólio 
 
 ## Contato
