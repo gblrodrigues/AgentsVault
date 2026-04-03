@@ -5,12 +5,12 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.gblrod.agentsvault.navigation.BottomItem
@@ -51,17 +51,20 @@ fun BottomBar(navHost: NavHostController) {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.title,
-                        tint = Color.White
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 label = {
                     Text(
                         text = item.title,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.Gray
+                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.primary,
+                    selectedTextColor = MaterialTheme.colorScheme.inverseOnSurface,
                 )
             )
         }

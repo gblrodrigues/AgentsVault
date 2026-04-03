@@ -6,17 +6,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.gblrod.agentsvault.local.AgentFavoriteDataStore
+import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.presentation.favorite.AgentFavoriteScreen
 import com.gblrod.agentsvault.presentation.agentsvault.AgentsScreen
 import com.gblrod.agentsvault.viewmodel.AgentViewModel
+import com.gblrod.agentsvault.viewmodel.ThemeViewModel
 
 @Composable
 fun NavHostController(
     navHost: NavHostController,
-    repository: AgentFavoriteDataStore,
+    repository: PrefsDataStore,
     paddingValues: PaddingValues,
-    searchExpanded: (Boolean) -> Unit
+    searchExpanded: (Boolean) -> Unit,
+    themeViewModel: ThemeViewModel
 ) {
     val agentViewModel: AgentViewModel = viewModel()
 
@@ -29,9 +31,10 @@ fun NavHostController(
 
             AgentsScreen(
                 viewModel = agentViewModel,
-                agentFavoriteDataStore = repository,
+                prefsDataStore = repository,
                 paddingValues = paddingValues,
-                onSearchExpanded = searchExpanded
+                onSearchExpanded = searchExpanded,
+                themeViewModel = themeViewModel
             )
         }
 
@@ -39,9 +42,10 @@ fun NavHostController(
             AgentFavoriteScreen(
                 viewModel = agentViewModel,
                 onFavoriteScreen = { navHost.popBackStack() },
-                agentFavoriteDataStore = repository,
+                prefsDataStore = repository,
                 paddingValues = paddingValues,
-                onSearchExpanded = searchExpanded
+                onSearchExpanded = searchExpanded,
+                themeViewModel = themeViewModel
             )
         }
     }

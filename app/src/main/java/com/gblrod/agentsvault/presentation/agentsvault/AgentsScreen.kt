@@ -15,22 +15,24 @@ import androidx.compose.ui.Modifier
 import com.gblrod.agentsvault.components.AgentContent
 import com.gblrod.agentsvault.components.AgentSearchBar
 import com.gblrod.agentsvault.dto.AgentDto
-import com.gblrod.agentsvault.local.AgentFavoriteDataStore
+import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.viewmodel.AgentViewModel
+import com.gblrod.agentsvault.viewmodel.ThemeViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun AgentsScreen(
     viewModel: AgentViewModel,
-    agentFavoriteDataStore: AgentFavoriteDataStore,
+    prefsDataStore: PrefsDataStore,
     paddingValues: PaddingValues,
-    onSearchExpanded: (Boolean) -> Unit
+    onSearchExpanded: (Boolean) -> Unit,
+    themeViewModel: ThemeViewModel
 ) {
     val agents by viewModel.agents.collectAsState()
     var selectAgent by remember { mutableStateOf<AgentDto?>(null) }
     var showAbilitiesSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val favorites by agentFavoriteDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
+    val favorites by prefsDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
     val currentAgent = selectAgent ?: agents.firstOrNull()
     var searchExpanded by remember { mutableStateOf(false) }
 
@@ -54,7 +56,8 @@ fun AgentsScreen(
             searchExpanded = { expanded ->
                 searchExpanded = expanded
                 onSearchExpanded(expanded)
-            }
+            },
+            themeViewModel = themeViewModel
         )
 
         if (!searchExpanded) {
@@ -65,7 +68,7 @@ fun AgentsScreen(
                 selectAgent = { selectAgent = it },
                 onToggleFavorite = { uuid ->
                     scope.launch {
-                        agentFavoriteDataStore.toggleFavorite(
+                        prefsDataStore.toggleFavorite(
                             idAgent = uuid
                         )
                     }

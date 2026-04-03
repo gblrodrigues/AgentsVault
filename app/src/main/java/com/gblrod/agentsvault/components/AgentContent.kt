@@ -29,6 +29,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -100,13 +101,12 @@ fun AgentContent(
                             .height(540.dp),
                         border = BorderStroke(
                             width = 2.dp,
-                            color = if (agentIsFavorite) Color.Yellow else Color.White
+                            color = if (agentIsFavorite) Color.Yellow else MaterialTheme.colorScheme.outline
                         ),
                         colors = CardDefaults.cardColors(
                             containerColor = Color.Transparent
                         )
                     ) {
-
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -124,7 +124,7 @@ fun AgentContent(
                                         text = agent.displayName.uppercase(),
                                         fontSize = 32.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = Color.Black,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         modifier = Modifier.align(Alignment.Center)
                                     )
 
@@ -133,9 +133,17 @@ fun AgentContent(
                                         onCheckedChange = {
                                             onToggleFavorite(agent.uuid)
                                             if (agentIsFavorite) {
-                                                Toast.makeText(context,"Agente ${currentAgent.displayName} desfavoritado!", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(
+                                                    context,
+                                                    "Agente ${currentAgent.displayName} desfavoritado!",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             } else {
-                                                Toast.makeText(context,"Agente ${currentAgent.displayName} favoritado!", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(
+                                                    context,
+                                                    "Agente ${currentAgent.displayName} favoritado!",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             }
                                         },
                                         modifier = Modifier.align(Alignment.TopEnd)
@@ -143,7 +151,7 @@ fun AgentContent(
                                         Icon(
                                             imageVector = if (agentIsFavorite) Icons.Default.Star else Icons.Default.StarBorder,
                                             contentDescription = "Ícone de favoritar",
-                                            tint = if (agentIsFavorite) Color.Yellow else Color.Black,
+                                            tint = if (agentIsFavorite) Color.Yellow else MaterialTheme.colorScheme.onSurface,
                                             modifier = Modifier.size(50.dp)
                                         )
                                     }
@@ -158,7 +166,7 @@ fun AgentContent(
                                         model = agent.role.displayIcon,
                                         contentDescription = "Ícone da função",
                                         modifier = Modifier.size(14.dp),
-                                        colorFilter = ColorFilter.tint(Color.Black)
+                                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface)
                                     )
 
                                     Spacer(Modifier.width(6.dp))
@@ -166,7 +174,7 @@ fun AgentContent(
                                     Text(
                                         text = agent.role.displayName.uppercase(),
                                         fontSize = 13.sp,
-                                        color = Color.Black,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         fontWeight = FontWeight.SemiBold
                                     )
                                 }
@@ -182,7 +190,7 @@ fun AgentContent(
                             ) {
                                 Text(
                                     text = "Ver Skills",
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         }
@@ -202,7 +210,7 @@ fun AgentContent(
                         Card(
                             border = if (currentAgent == item) BorderStroke(
                                 width = 2.dp,
-                                color = Color.White
+                                color = MaterialTheme.colorScheme.outline
                             ) else null,
                             colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                         ) {

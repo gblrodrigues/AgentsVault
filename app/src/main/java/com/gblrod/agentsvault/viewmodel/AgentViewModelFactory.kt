@@ -2,16 +2,16 @@ package com.gblrod.agentsvault.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.gblrod.agentsvault.local.AgentFavoriteDataStore
+import com.gblrod.agentsvault.local.PrefsDataStore
 
-class AgentFavoriteViewModelFactory(
-    private val repository: AgentFavoriteDataStore
+class AgentViewModelFactory(
+    private val repository: PrefsDataStore
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        if (modelClass.isAssignableFrom(AgentFavoriteViewModel::class.java)) {
-            return AgentFavoriteViewModel(repository) as T
+        if (modelClass.isAssignableFrom(ThemeViewModel::class.java)) {
+            return ThemeViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

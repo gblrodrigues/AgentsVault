@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,7 +31,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,22 +38,24 @@ import androidx.compose.ui.unit.sp
 import com.gblrod.agentsvault.components.AgentContent
 import com.gblrod.agentsvault.components.AgentSearchBar
 import com.gblrod.agentsvault.dto.AgentDto
-import com.gblrod.agentsvault.local.AgentFavoriteDataStore
+import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor
 import com.gblrod.agentsvault.viewmodel.AgentViewModel
+import com.gblrod.agentsvault.viewmodel.ThemeViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AgentFavoriteScreen(
     viewModel: AgentViewModel,
-    agentFavoriteDataStore: AgentFavoriteDataStore,
+    prefsDataStore: PrefsDataStore,
     paddingValues: PaddingValues,
     onSearchExpanded: (Boolean) -> Unit,
     onFavoriteScreen: () -> Unit,
+    themeViewModel: ThemeViewModel
 ) {
     val agents by viewModel.agents.collectAsState()
-    val favorites by agentFavoriteDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
+    val favorites by prefsDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
     val favoriteAgents = agents.filter { agent -> favorites.contains(agent.uuid) }
     var selectAgent by remember { mutableStateOf<AgentDto?>(null) }
     var showAbilitiesSheet by remember { mutableStateOf(false) }
@@ -82,14 +84,14 @@ fun AgentFavoriteScreen(
                 Icon(
                     imageVector = Icons.Default.Warning,
                     contentDescription = "Ícone de Sem favorito",
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(70.dp)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Sem agente favorito",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
@@ -98,7 +100,7 @@ fun AgentFavoriteScreen(
 
                 Text(
                     text = "Quando você favoritar agentes, \neles aparecerão aqui.",
-                    color = Color.LightGray,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.SemiBold
@@ -119,13 +121,13 @@ fun AgentFavoriteScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Ícone de Retornar para main",
-                            tint = Color.Black,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(horizontal = 7.dp)
                         )
 
                         Text(
                             text = "Favoritar Agentes",
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -141,7 +143,8 @@ fun AgentFavoriteScreen(
                 searchExpanded = { expanded ->
                     searchExpanded = expanded
                     onSearchExpanded(expanded)
-                }
+                },
+                themeViewModel = themeViewModel
             )
 
             if (!searchExpanded) {
@@ -152,7 +155,7 @@ fun AgentFavoriteScreen(
                     selectAgent = { selectAgent = it },
                     onToggleFavorite = { uuid ->
                         scope.launch {
-                            agentFavoriteDataStore.toggleFavorite(uuid)
+                            prefsDataStore.toggleFavorite(uuid)
                         }
                     },
                     paddingValues = paddingValues,

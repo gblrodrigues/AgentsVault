@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import coil.compose.AsyncImage
 import com.gblrod.agentsvault.ui.theme.BackGroundCardColorOne
 import com.gblrod.agentsvault.ui.theme.BackGroundCardColorTwo
@@ -60,7 +61,8 @@ fun AgentBottomSheet(
                         AsyncImage(
                             model = it.displayIcon,
                             contentDescription = "Ícones das habilidades",
-                            modifier = Modifier.size(45.dp)
+                            modifier = Modifier.size(45.dp),
+                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface)
                         )
 
                         Spacer(modifier = Modifier.width(12.dp))
@@ -72,14 +74,14 @@ fun AgentBottomSheet(
                                 text = it.displayName,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                color = MaterialTheme.colorScheme.onSurface
                             )
 
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = it.description,
                                 fontSize = 13.sp,
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 textAlign = TextAlign.Justify,
                             )
                         }

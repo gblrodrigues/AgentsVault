@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,19 +17,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.gblrod.agentsvault.components.AgentTheme
 import com.gblrod.agentsvault.components.BottomBar
-import com.gblrod.agentsvault.local.AgentFavoriteDataStore
+import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.navigation.NavHostController
 import com.gblrod.agentsvault.ui.theme.BackgroundColorOne
 import com.gblrod.agentsvault.ui.theme.BackgroundColorTwo
+import com.gblrod.agentsvault.viewmodel.AgentViewModelFactory
+import com.gblrod.agentsvault.viewmodel.ThemeViewModel
 
 
 private val Context.dataStore by preferencesDataStore(name = "agent_favorite")
 
 class MainActivity : ComponentActivity() {
     private val repository by lazy {
-        AgentFavoriteDataStore(applicationContext.dataStore)
+        PrefsDataStore(applicationContext.dataStore)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +41,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val navController = rememberNavController()
-            var showBottomBar by remember { mutableStateOf(true) }
             val backgroundGradient = remember {
                 Brush.verticalGradient(
                     colors = listOf(
@@ -46,32 +49,40 @@ class MainActivity : ComponentActivity() {
                     )
                 )
             }
+            val factory = AgentViewModelFactory(repository)
+            val themeViewModel: ThemeViewModel = viewModel(factory = factory)
+            val theme by themeViewModel.theme.collectAsState()
 
-            Scaffold(
-                bottomBar = {
-                    if (showBottomBar) {
-                        BottomBar(
-                            navHost = navController
+            AgentTheme(
+                themeOption = theme
+            ) {
+                val navController = rememberNavController()
+                var showBottomBar by remember { mutableStateOf(true) }
+
+                Scaffold(
+                    bottomBar = {
+                        if (showBottomBar) {
+                            BottomBar(
+                                navHost = navController
+                            )
+                        }
+                    },
+                ) { paddingValues ->
+
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .background(brush = backgroundGradient)) {
+
+                        NavHostController(
+                            navHost = navController,
+                            repository = repository,
+                            paddingValues = paddingValues,
+                            searchExpanded = { isOpen ->
+                                showBottomBar = !isOpen
+                            },
+                            themeViewModel = themeViewModel
                         )
                     }
-                },
-            ) { paddingValues ->
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = backgroundGradient
-                        )
-                ) {
-                    NavHostController(
-                        navHost = navController,
-                        repository = repository,
-                        paddingValues = paddingValues,
-                        searchExpanded = { isOpen ->
-                            showBottomBar = !isOpen
-                        }
-                    )
                 }
             }
         }

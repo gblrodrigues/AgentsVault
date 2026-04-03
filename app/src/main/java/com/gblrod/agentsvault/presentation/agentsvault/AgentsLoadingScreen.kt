@@ -23,16 +23,7 @@ import com.gblrod.agentsvault.ui.theme.BackgroundColorTwo
 fun AgentsLoadingScreen() {
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        BackgroundColorOne,
-                        BackgroundColorTwo
-                    )
-                )
-            ),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     )
     {
@@ -48,6 +39,8 @@ fun AgentsLoadingScreen() {
             color = Color.Black,
             modifier = Modifier.padding(top = 80.dp)
         )
-        CircularProgressIndicator(color = Color.Black)
+        CircularProgressIndicator(
+             color = Color.Black
+        )
     }
 }
