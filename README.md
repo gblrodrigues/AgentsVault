@@ -28,10 +28,11 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 
 * Listagem de agentes  
 * Busca de agentes  
-* Favoritar agentes com persistência usando DataStore  
+* Favoritar agentes com persistência usando DataStore
+* Suporte a temas (Light, Dark e System) com persistência usando DataStore  
 * Tela dedicada para visualizar agentes favoritados  
 * Splash Screen inicial do aplicativo 
-* Seleção de agentes com indicador visual no card  
+* Seleção de agentes com indicador visual no card
 * Exibição de imagem e background personalizado  
 * Classe do agente (Duelista, Controlador, etc.)  
 * Modal Bottom Sheet com habilidades  
@@ -40,7 +41,7 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 
 ## Demonstração
 Abaixo irei disponibilizar um vídeo mostrando como o aplicativo está:
-> https://github.com/user-attachments/assets/cf2c6d30-e55f-492e-b802-1f4e6ab1e15b
+> https://github.com/user-attachments/assets/63b15537-f3a6-40d7-a5a9-55baf17a6009
 
 ## Tomadas de Decisões
 
@@ -62,6 +63,9 @@ Material 3 foi escolhido para manter um visual moderno e consistente, aproveitan
 
 ### Persistência de Favoritos (DataStore)
 Para permitir que os agentes favoritados fossem mantidos mesmo após fechar o aplicativo, utilizei DataStore como solução de persistência local. 
+
+### Sistema de Temas (Light, Dark e System)
+Implementei um sistema de temas com suporte aos modos **Light**, **Dark** e **System**, permitindo que o aplicativo se adapte automaticamente às preferências.
 
 ### Sistema de Busca (SearchBar)
 Para facilitar a navegação entre os agentes, implementei uma funcionalidade de busca que permite filtrar a lista dinamicamente conforme o nome digitado.
