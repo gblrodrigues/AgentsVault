@@ -1,6 +1,6 @@
 package com.gblrod.agentsvault.components
 
-import android.widget.Toast
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,22 +30,30 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,9 +68,11 @@ fun AgentContent(
     onShowAbilities: () -> Unit,
     onDismissAbilities: () -> Unit
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
+    var openDialog by remember { mutableStateOf(false) }
+    var removedAgent by remember { mutableStateOf<AgentDto?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     currentAgent?.let { agent ->
         val agentIsFavorite = favorites.contains(agent.uuid)
@@ -101,12 +111,13 @@ fun AgentContent(
                             .height(540.dp),
                         border = BorderStroke(
                             width = 2.dp,
-                            color = if (agentIsFavorite) Color.Yellow else MaterialTheme.colorScheme.outline
+                            color = if (agentIsFavorite) Color.Yellow else MaterialTheme.colorScheme.inverseSurface
                         ),
                         colors = CardDefaults.cardColors(
                             containerColor = Color.Transparent
                         )
-                    ) {
+                    )
+                    {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -131,19 +142,10 @@ fun AgentContent(
                                     IconToggleButton(
                                         checked = agentIsFavorite,
                                         onCheckedChange = {
-                                            onToggleFavorite(agent.uuid)
                                             if (agentIsFavorite) {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Agente ${currentAgent.displayName} desfavoritado!",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                openDialog = true
                                             } else {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Agente ${currentAgent.displayName} favoritado!",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                onToggleFavorite(agent.uuid)
                                             }
                                         },
                                         modifier = Modifier.align(Alignment.TopEnd)
@@ -153,6 +155,32 @@ fun AgentContent(
                                             contentDescription = "Ícone de favoritar",
                                             tint = if (agentIsFavorite) Color.Yellow else MaterialTheme.colorScheme.onSurface,
                                             modifier = Modifier.size(50.dp)
+                                        )
+                                    }
+                                    if (openDialog) {
+                                        AgentDialogFavorite(
+                                            title = "Desfavoritar ${agent.displayName}",
+                                            description = "Tem certeza que quer remover ${agent.displayName} dos seus favoritos?",
+                                            onConfirm = {
+                                                removedAgent = agent
+                                                onToggleFavorite(agent.uuid)
+                                                scope.launch {
+                                                    val result = snackbarHostState.showSnackbar(
+                                                        message = "Agente ${currentAgent.displayName} desfavoritado!",
+                                                        actionLabel = "Desfazer",
+                                                        duration = SnackbarDuration.Short
+                                                    )
+
+                                                    if (result == SnackbarResult.ActionPerformed) {
+                                                        onToggleFavorite(agent.uuid)
+                                                        selectAgent(agent)
+                                                    }
+                                                }
+                                                openDialog = false
+                                            },
+                                            onDismiss = {
+                                                openDialog = false
+                                            }
                                         )
                                     }
                                 }
@@ -183,7 +211,7 @@ fun AgentContent(
                             Button(
                                 onClick = onShowAbilities,
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(16.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = ButtonAbilityColor
                                 )
@@ -210,7 +238,7 @@ fun AgentContent(
                         Card(
                             border = if (currentAgent == item) BorderStroke(
                                 width = 2.dp,
-                                color = MaterialTheme.colorScheme.outline
+                                color = MaterialTheme.colorScheme.inverseSurface
                             ) else null,
                             colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                         ) {
@@ -225,6 +253,12 @@ fun AgentContent(
                     }
                 }
             }
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 265.dp)
+            )
         }
     }
 }

@@ -182,7 +182,7 @@ fun AgentSearchBar(
                         )
                     )
                 },
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = SearchBarDefaults.colors(
                     containerColor = if (expanded) {
                         MaterialTheme.colorScheme.surface

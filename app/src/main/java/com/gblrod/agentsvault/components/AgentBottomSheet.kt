@@ -43,7 +43,7 @@ fun AgentBottomSheet(
                 .fillMaxWidth()
                 .height(400.dp)
                 .verticalScroll(scroll)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(

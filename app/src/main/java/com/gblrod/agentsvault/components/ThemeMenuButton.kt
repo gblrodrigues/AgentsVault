@@ -41,7 +41,7 @@ fun ThemeMenuButton(themeViewModel: ThemeViewModel) {
         DropdownMenu(
             expanded = showMenuTheme,
             onDismissRequest = { showMenuTheme = false },
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(16.dp)
         ) {
             DropdownMenuItem(
                 leadingIcon = {

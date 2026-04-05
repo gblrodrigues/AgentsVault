@@ -112,7 +112,7 @@ fun AgentFavoriteScreen(
                         onFavoriteScreen()
                     },
                     modifier = Modifier.fillMaxWidth(0.6f),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = ButtonAbilityColor
                     )
