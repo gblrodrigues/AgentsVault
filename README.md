@@ -26,22 +26,31 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 
 ## Funcionalidades
 
+### Agentes
 * Listagem de agentes  
 * Busca de agentes  
-* Favoritar agentes com persistência usando DataStore
-* Suporte a temas (Light, Dark e System) com persistência usando DataStore  
-* Tela dedicada para visualizar agentes favoritados  
-* Splash Screen inicial do aplicativo 
-* Seleção de agentes com indicador visual no card
-* Exibição de imagem e background personalizado  
-* Classe do agente (Duelista, Controlador, etc.)  
+* Favoritar agentes com persistência usando DataStore  
+* Tela dedicada para visualizar agentes favoritados
+* Confirmação ao remover agentes dos favoritos com opção de desfazer a ação
+* Seleção de agentes com indicador visual no card  
 * Modal Bottom Sheet com habilidades  
 * Ícones e descrição detalhada de cada habilidade  
+* Classe do agente (Duelista, Controlador, etc.)  
+
+### Mapas
+* Listagem de mapas  
+* Busca de mapas  
+* Seleção de mapas com indicador visual no card  
+* Exibição da imagem do mapa selecionado em destaque  
+
+### Gerais
+* Suporte a temas (Light, Dark e System) com persistência usando DataStore  
+* Splash Screen inicial do aplicativo  
 * Interface moderna com gradientes personalizados  
 
 ## Demonstração
 Abaixo irei disponibilizar um vídeo mostrando como o aplicativo está:
-> https://github.com/user-attachments/assets/63b15537-f3a6-40d7-a5a9-55baf17a6009
+> https://github.com/user-attachments/assets/c6cbcd82-64b3-43d9-b173-c7a89279e137
 
 ## Tomadas de Decisões
 
@@ -52,7 +61,7 @@ Optei por Jetpack Compose por já ter experiência com a abordagem declarativa, 
 Escolhi estruturar o projeto em MVVM para manter a lógica separada da interface. O uso de ViewModel ajuda no gerenciamento de estado e segue as boas práticas recomendadas no desenvolvimento Android moderno.
 
 ### Consumo de API
-Os dados dos agentes são obtidos por meio de uma API pública da comunidade. Isso me permitiu praticar requisições HTTP, tratamento de dados e organização em camadas dentro do projeto.
+Os dados dos agentes e mapas são obtidos por meio de uma API pública da comunidade. Isso me permitiu praticar requisições HTTP, tratamento de dados e organização em camadas dentro do projeto.
 > 🔗 Link da API: https://valorant-api.com/ 
 
 ### Carregamento de Imagens
@@ -68,10 +77,10 @@ Para permitir que os agentes favoritados fossem mantidos mesmo após fechar o ap
 Implementei um sistema de temas com suporte aos modos **Light**, **Dark** e **System**, permitindo que o aplicativo se adapte automaticamente às preferências.
 
 ### Sistema de Busca (SearchBar)
-Para facilitar a navegação entre os agentes, implementei uma funcionalidade de busca que permite filtrar a lista dinamicamente conforme o nome digitado.
+Para facilitar a navegação entre os agentes e mapas, implementei uma funcionalidade de busca que permite filtrar a lista dinamicamente conforme o nome digitado.
 
-### Seleção de Agentes
-Adicionei um indicador visual no card do agente quando ele é selecionado, facilitando o entendimento visual de qual agente está selecionado.
+### Seleção de Agentes e Mapas
+Adicionei um indicador visual nos cards de agentes e mapas para destacar quando é selecionado, facilitando a identificação.
 
 ### Splash Screen
 Implementei uma Splash Screen para criar uma experiência inicial mais polida ao abrir o aplicativo.
