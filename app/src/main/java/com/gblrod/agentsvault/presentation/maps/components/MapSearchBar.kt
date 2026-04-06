@@ -1,16 +1,12 @@
-package com.gblrod.agentsvault.components
+package com.gblrod.agentsvault.presentation.maps.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,50 +32,52 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.gblrod.agentsvault.dto.AgentDto
+import com.gblrod.agentsvault.components.ThemeMenuButton
+import com.gblrod.agentsvault.dto.MapDto
 import com.gblrod.agentsvault.viewmodel.ThemeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AgentSearchBar(
-    agents: List<AgentDto>,
-    onAgentSelected: (AgentDto) -> Unit,
+fun MapSearchBar(
+    maps: List<MapDto>,
+    onMapSelected: (MapDto) -> Unit,
     searchExpanded: (Boolean) -> Unit,
     themeViewModel: ThemeViewModel
 ) {
     var query by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    val filteredAgents = agents.filter {
+    val filteredMaps = maps.filter {
         it.displayName.contains(query, ignoreCase = true)
     }
-    val filterRandomNameAgent = agents.firstOrNull()?.displayName
-    var placeHolder by remember { mutableStateOf(filterRandomNameAgent) }
-    val currentAgents by rememberUpdatedState(agents)
+    val validMaps = filteredMaps.filter {
+        it.displayName.isNotBlank() && it.displayIcon != null && it.splash != null
+    }
+    val filterRandomNameMap = maps.firstOrNull()?.displayName
+    var placeHolder by remember { mutableStateOf(filterRandomNameMap) }
     val scope = rememberCoroutineScope()
     val focus = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
+
     LaunchedEffect(Unit) {
         while (true) {
             delay(2000)
-            val newAgentName = currentAgents
+            val newMapName = validMaps
                 .filter { it.displayName != placeHolder }
                 .randomOrNull()
                 ?.displayName
 
-            if (newAgentName != null) {
-                placeHolder = newAgentName
+            if (newMapName != null) {
+                placeHolder = newMapName
             }
         }
     }
@@ -98,7 +96,7 @@ fun AgentSearchBar(
                 Modifier.fillMaxWidth()
             } else {
                 Modifier.padding(horizontal = 8.dp)
-    },
+            },
             verticalAlignment = Alignment.CenterVertically
         ) {
             SearchBar(
@@ -194,25 +192,25 @@ fun AgentSearchBar(
             )
             {
                 LazyColumn {
-                    items(filteredAgents) { agent ->
+                    items(validMaps) { map ->
                         ListItem(
                             headlineContent = {
                                 Text(
-                                    text = agent.displayName,
+                                    text = map.displayName,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                             },
                             leadingContent = {
                                 AsyncImage(
-                                    model = agent.displayIcon,
-                                    contentDescription = agent.displayName,
+                                    model = map.displayIcon,
+                                    contentDescription = map.displayName,
                                     modifier = Modifier.size(40.dp)
                                 )
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    onAgentSelected(agent)
+                                    onMapSelected(map)
                                     query = ""
                                     expanded = false
                                     searchExpanded(false)

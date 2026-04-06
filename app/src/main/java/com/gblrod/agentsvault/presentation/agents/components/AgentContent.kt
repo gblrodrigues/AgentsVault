@@ -1,6 +1,5 @@
-package com.gblrod.agentsvault.components
+package com.gblrod.agentsvault.presentation.agents.components
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -37,6 +37,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,6 +74,16 @@ fun AgentContent(
     var openDialog by remember { mutableStateOf(false) }
     var removedAgent by remember { mutableStateOf<AgentDto?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(currentAgent) {
+        currentAgent?.let { selected ->
+            val index = agents.indexOfFirst { it.uuid == selected.uuid }
+            if (index >= 0) {
+                listState.animateScrollToItem(index)
+            }
+        }
+    }
 
     currentAgent?.let { agent ->
         val agentIsFavorite = favorites.contains(agent.uuid)
@@ -226,6 +237,7 @@ fun AgentContent(
                 }
 
                 LazyRow(
+                    state = listState,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(
@@ -234,9 +246,12 @@ fun AgentContent(
                     horizontalArrangement = Arrangement.spacedBy(17.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp)
                 ) {
-                    items(agents) { item ->
+                    items(
+                        items = agents,
+                        key = { it.uuid }
+                    ) { item ->
                         Card(
-                            border = if (currentAgent == item) BorderStroke(
+                            border = if (currentAgent.uuid == item.uuid) BorderStroke(
                                 width = 2.dp,
                                 color = MaterialTheme.colorScheme.inverseSurface
                             ) else null,

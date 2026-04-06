@@ -1,4 +1,4 @@
-package com.gblrod.agentsvault.presentation.favorite
+package com.gblrod.agentsvault.presentation.favorites
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,8 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gblrod.agentsvault.components.AgentContent
-import com.gblrod.agentsvault.components.AgentSearchBar
+import com.gblrod.agentsvault.presentation.agents.components.AgentContent
+import com.gblrod.agentsvault.presentation.agents.components.AgentSearchBar
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor

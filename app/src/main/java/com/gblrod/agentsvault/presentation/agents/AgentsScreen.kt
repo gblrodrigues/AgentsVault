@@ -1,4 +1,4 @@
-package com.gblrod.agentsvault.presentation.agentsvault
+package com.gblrod.agentsvault.presentation.agents
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,8 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.gblrod.agentsvault.components.AgentContent
-import com.gblrod.agentsvault.components.AgentSearchBar
+import com.gblrod.agentsvault.components.LoadingScreen
+import com.gblrod.agentsvault.presentation.agents.components.AgentContent
+import com.gblrod.agentsvault.presentation.agents.components.AgentSearchBar
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.viewmodel.AgentViewModel
@@ -41,7 +42,7 @@ fun AgentsScreen(
     }
 
     if (agents.isEmpty()) {
-        AgentsLoadingScreen()
+        LoadingScreen()
         return
     }
 

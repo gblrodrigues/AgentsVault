@@ -1,7 +1,8 @@
 package com.gblrod.agentsvault.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
@@ -19,13 +20,19 @@ import com.gblrod.agentsvault.navigation.BottomItem
 fun BottomBar(navHost: NavHostController) {
     val items = listOf(
         BottomItem(
-            title = "Home",
+            title = "Agentes",
             route = "main",
-            icon = Icons.Default.Home
+            icon = Icons.Default.Groups
         ),
 
         BottomItem(
-            title = "Favoritos",
+            title = "Mapas",
+            route = "maps",
+            icon = Icons.Default.Map
+        ),
+
+        BottomItem(
+            title = "Agentes Favoritos",
             route = "favorites",
             icon = Icons.Default.Star
         )

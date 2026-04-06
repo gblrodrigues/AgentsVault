@@ -1,4 +1,4 @@
-package com.gblrod.agentsvault.components
+package com.gblrod.agentsvault.presentation.agents.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border

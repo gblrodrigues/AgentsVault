@@ -7,8 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gblrod.agentsvault.local.PrefsDataStore
-import com.gblrod.agentsvault.presentation.favorite.AgentFavoriteScreen
-import com.gblrod.agentsvault.presentation.agentsvault.AgentsScreen
+import com.gblrod.agentsvault.presentation.favorites.AgentFavoriteScreen
+import com.gblrod.agentsvault.presentation.agents.AgentsScreen
+import com.gblrod.agentsvault.presentation.maps.MapsScreen
 import com.gblrod.agentsvault.viewmodel.AgentViewModel
 import com.gblrod.agentsvault.viewmodel.ThemeViewModel
 
@@ -46,6 +47,15 @@ fun NavHostController(
                 paddingValues = paddingValues,
                 onSearchExpanded = searchExpanded,
                 themeViewModel = themeViewModel
+            )
+        }
+
+        composable("maps") {
+            MapsScreen(
+                viewModel = agentViewModel,
+                themeViewModel = themeViewModel,
+                onSearchExpanded = searchExpanded,
+                paddingValues = paddingValues
             )
         }
     }

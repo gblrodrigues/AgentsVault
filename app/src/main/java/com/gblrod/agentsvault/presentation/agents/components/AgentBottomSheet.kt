@@ -1,4 +1,4 @@
-package com.gblrod.agentsvault.components
+package com.gblrod.agentsvault.presentation.agents.components
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
