@@ -10,8 +10,10 @@ import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.presentation.favorites.AgentFavoriteScreen
 import com.gblrod.agentsvault.presentation.agents.AgentsScreen
 import com.gblrod.agentsvault.presentation.maps.MapsScreen
-import com.gblrod.agentsvault.viewmodel.AgentViewModel
-import com.gblrod.agentsvault.viewmodel.ThemeViewModel
+import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
+import com.gblrod.agentsvault.presentation.maps.viewmodel.MapsViewModel
+import com.gblrod.agentsvault.presentation.retry.RetryViewModel
+import com.gblrod.agentsvault.presentation.theme.ThemeViewModel
 
 @Composable
 fun NavHostController(
@@ -21,7 +23,9 @@ fun NavHostController(
     searchExpanded: (Boolean) -> Unit,
     themeViewModel: ThemeViewModel
 ) {
-    val agentViewModel: AgentViewModel = viewModel()
+    val agentsViewModel: AgentsViewModel = viewModel()
+    val mapsViewModel: MapsViewModel = viewModel()
+    val retryViewModel: RetryViewModel = viewModel()
 
     NavHost(
         navController = navHost,
@@ -31,31 +35,34 @@ fun NavHostController(
         composable("main") {
 
             AgentsScreen(
-                viewModel = agentViewModel,
+                viewModel = agentsViewModel,
                 prefsDataStore = repository,
                 paddingValues = paddingValues,
                 onSearchExpanded = searchExpanded,
-                themeViewModel = themeViewModel
+                themeViewModel = themeViewModel,
+                retryViewModel = retryViewModel
             )
         }
 
         composable("favorites") {
             AgentFavoriteScreen(
-                viewModel = agentViewModel,
+                viewModel = agentsViewModel,
                 onFavoriteScreen = { navHost.popBackStack() },
                 prefsDataStore = repository,
                 paddingValues = paddingValues,
                 onSearchExpanded = searchExpanded,
-                themeViewModel = themeViewModel
+                themeViewModel = themeViewModel,
+                retryViewModel = retryViewModel
             )
         }
 
         composable("maps") {
             MapsScreen(
-                viewModel = agentViewModel,
+                viewModel = mapsViewModel,
                 themeViewModel = themeViewModel,
                 onSearchExpanded = searchExpanded,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                retryViewModel = retryViewModel
             )
         }
     }

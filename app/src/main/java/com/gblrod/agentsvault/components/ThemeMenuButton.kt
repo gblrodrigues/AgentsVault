@@ -2,8 +2,6 @@ package com.gblrod.agentsvault.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -20,10 +18,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.gblrod.agentsvault.viewmodel.ThemeViewModel
+import com.gblrod.agentsvault.presentation.theme.ThemeViewModel
 
 @Composable
 fun ThemeMenuButton(themeViewModel: ThemeViewModel) {

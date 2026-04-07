@@ -25,8 +25,8 @@ import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.navigation.NavHostController
 import com.gblrod.agentsvault.ui.theme.BackgroundColorOne
 import com.gblrod.agentsvault.ui.theme.BackgroundColorTwo
-import com.gblrod.agentsvault.viewmodel.AgentViewModelFactory
-import com.gblrod.agentsvault.viewmodel.ThemeViewModel
+import com.gblrod.agentsvault.presentation.theme.ThemeViewModel
+import com.gblrod.agentsvault.presentation.theme.ThemeViewModelFactory
 
 
 private val Context.dataStore by preferencesDataStore(name = "agent_favorite")
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                     )
                 )
             }
-            val factory = AgentViewModelFactory(repository)
+            val factory = ThemeViewModelFactory(repository)
             val themeViewModel: ThemeViewModel = viewModel(factory = factory)
             val theme by themeViewModel.theme.collectAsState()
 

@@ -1,4 +1,4 @@
-package com.gblrod.agentsvault.viewmodel
+package com.gblrod.agentsvault.presentation.theme
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

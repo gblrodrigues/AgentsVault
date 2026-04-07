@@ -11,55 +11,71 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.gblrod.agentsvault.components.ErrorMessage
+import com.gblrod.agentsvault.components.LoadingScreen
+import com.gblrod.agentsvault.dto.MapDto
+import com.gblrod.agentsvault.dto.MapsUiState
 import com.gblrod.agentsvault.presentation.maps.components.MapContent
 import com.gblrod.agentsvault.presentation.maps.components.MapSearchBar
-import com.gblrod.agentsvault.dto.MapDto
-import com.gblrod.agentsvault.components.LoadingScreen
-import com.gblrod.agentsvault.viewmodel.AgentViewModel
-import com.gblrod.agentsvault.viewmodel.ThemeViewModel
+import com.gblrod.agentsvault.presentation.maps.viewmodel.MapsViewModel
+import com.gblrod.agentsvault.presentation.retry.RetryViewModel
+import com.gblrod.agentsvault.presentation.theme.ThemeViewModel
 
 @Composable
 fun MapsScreen(
-    viewModel: AgentViewModel,
+    viewModel: MapsViewModel,
     themeViewModel: ThemeViewModel,
     onSearchExpanded: (Boolean) -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    retryViewModel: RetryViewModel
 ) {
-    val maps by viewModel.maps.collectAsState()
     var selectMap by remember { mutableStateOf<MapDto?>(null) }
-    val currentMap = selectMap ?: maps.firstOrNull()
     var searchExpanded by remember { mutableStateOf(false) }
+    val uiState by viewModel.mapsUiState.collectAsState()
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.fetchMaps()
-    }
-
-    if (maps.isEmpty()) {
-        LoadingScreen()
-        return
+    LaunchedEffect(Unit) {
+        viewModel.observeMapsRetry(retryViewModel)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        MapSearchBar(
-            maps = maps,
-            onMapSelected = {
-                selectMap = it
-                searchExpanded = false
-            },
-            searchExpanded = { expanded ->
-                searchExpanded = expanded
-                onSearchExpanded(expanded)
-            },
-            themeViewModel = themeViewModel
-        )
 
-        if (!searchExpanded) {
-            MapContent(
-                maps = maps,
-                currentMap = currentMap,
-                selectMap = { selectMap = it },
-                paddingValues = paddingValues
-            )
+        when (val state = uiState) {
+            is MapsUiState.Loading -> {
+                LoadingScreen()
+            }
+
+            is MapsUiState.Success -> {
+                val maps = state.maps
+                val currentMap = selectMap ?: maps.firstOrNull()
+                MapSearchBar(
+                    maps = maps,
+                    onMapSelected = {
+                        selectMap = it
+                        searchExpanded = false
+                    },
+                    searchExpanded = { expanded ->
+                        searchExpanded = expanded
+                        onSearchExpanded(expanded)
+                    },
+                    themeViewModel = themeViewModel
+                )
+
+                if (!searchExpanded) {
+                    MapContent(
+                        maps = maps,
+                        currentMap = currentMap,
+                        selectMap = { selectMap = it },
+                        paddingValues = paddingValues
+                    )
+                }
+            }
+
+            is MapsUiState.Error -> {
+                ErrorMessage(
+                    message = state.message,
+                    retryViewModel = retryViewModel
+                )
+            }
         }
     }
 }

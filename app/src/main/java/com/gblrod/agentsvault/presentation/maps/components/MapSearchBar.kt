@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gblrod.agentsvault.components.ThemeMenuButton
 import com.gblrod.agentsvault.dto.MapDto
-import com.gblrod.agentsvault.viewmodel.ThemeViewModel
+import com.gblrod.agentsvault.presentation.theme.ThemeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

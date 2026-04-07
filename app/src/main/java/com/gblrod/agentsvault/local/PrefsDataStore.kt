@@ -42,9 +42,9 @@ class PrefsDataStore(
 
     fun getTheme(): Flow<ThemeOptions> {
         return dataStore.data.map { prefs ->
-            ThemeOptions.valueOf(
-                prefs[themeKey] ?: ThemeOptions.SYSTEM.name
-            )
+            ThemeOptions.entries.find {
+                it.name == prefs[themeKey]
+            } ?: ThemeOptions.SYSTEM
         }
     }
 }
