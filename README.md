@@ -17,7 +17,7 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 - [Kotlin](https://kotlinlang.org/) — Melhor linguagem de todas
 - [Jetpack Compose](https://developer.android.com/jetpack/compose) — Criação rápida e simples da interface
 - [Material 3](https://m3.material.io/) — Utilizado para manter consistência visual e boas práticas de UI
-- Arquitetura MVVM — Organização do projeto utilizando ViewModel para gerenciamento de estado e separação de responsabilidades.
+- Arquitetura MVVM — Organização do projeto utilizando ViewModel e StateFlow para gerenciamento de estado e separação de responsabilidades.
 - [Retrofit](https://square.github.io/retrofit/) — Cliente HTTP para consumo da API REST.
 - [Coil](https://coil-kt.github.io/coil/compose/) — Carregamento assíncrono de imagens via URL (AsyncImage)
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) — Persistência de dados local utilizada para salvar agentes favoritados.
@@ -44,6 +44,7 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 * Exibição da imagem do mapa selecionado em destaque  
 
 ### Gerais
+* Tratamento de estados de carregamento e erro com opção de retry
 * Suporte a temas (Light, Dark e System) com persistência usando DataStore  
 * Splash Screen inicial do aplicativo  
 * Interface moderna com gradientes personalizados  
@@ -63,6 +64,10 @@ Escolhi estruturar o projeto em MVVM para manter a lógica separada da interface
 ### Consumo de API
 Os dados dos agentes e mapas são obtidos por meio de uma API pública da comunidade. Isso me permitiu praticar requisições HTTP, tratamento de dados e organização em camadas dentro do projeto.
 > 🔗 Link da API: https://valorant-api.com/ 
+
+### Gerenciamento de Estado de UI (UiState)
+Para lidar com os estados da tela (carregando, sucesso e erro), utilizei uma abordagem com sealed class (UiState) junto com StateFlow.
+Com isso, a interface reage automaticamente às mudanças de estado, deixando o código mais organizado e fácil de entender.
 
 ### Carregamento de Imagens
 Utilizei a biblioteca Coil para carregar imagens via URL de forma assíncrona, garantindo uma experiência mais fluida e melhor desempenho na renderização das imagens.
@@ -94,7 +99,7 @@ Este projeto foi desenvolvido com o objetivo de:
 
 * Colocar em prática o consumo de API REST e o tratamento dos dados recebidos
 * Evoluir na construção de interfaces usando Jetpack Compose
-* Trabalhar melhor com gerenciamento de estado utilizando ViewModel
+* Trabalhar melhor com gerenciamento de estado utilizando ViewModel e StateFlow
 * Explorar interações de UI como BottomSheet
 * Utilizar DataStore para salvar dados localmente
 * Aplicar boas práticas de organização e arquitetura (MVVM e feature-first)
