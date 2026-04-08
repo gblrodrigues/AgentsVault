@@ -15,9 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -67,14 +67,14 @@ fun AgentContent(
     paddingValues: PaddingValues,
     showAbilitiesSheet: Boolean,
     onShowAbilities: () -> Unit,
-    onDismissAbilities: () -> Unit
+    onDismissAbilities: () -> Unit,
+    listState: LazyListState
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
     var openDialog by remember { mutableStateOf(false) }
     var removedAgent by remember { mutableStateOf<AgentDto?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
-    val listState = rememberLazyListState()
 
     LaunchedEffect(currentAgent) {
         currentAgent?.let { selected ->

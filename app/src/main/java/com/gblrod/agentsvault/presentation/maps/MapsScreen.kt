@@ -3,6 +3,7 @@ package com.gblrod.agentsvault.presentation.maps
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +33,7 @@ fun MapsScreen(
     var selectMap by remember { mutableStateOf<MapDto?>(null) }
     var searchExpanded by remember { mutableStateOf(false) }
     val uiState by viewModel.mapsUiState.collectAsState()
+    val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         viewModel.observeMapsRetry(retryViewModel)
@@ -65,16 +67,31 @@ fun MapsScreen(
                         maps = maps,
                         currentMap = currentMap,
                         selectMap = { selectMap = it },
-                        paddingValues = paddingValues
+                        paddingValues = paddingValues,
+                        listState = listState
                     )
                 }
             }
 
             is MapsUiState.Error -> {
-                ErrorMessage(
-                    message = state.message,
-                    retryViewModel = retryViewModel
+                MapSearchBar(
+                    maps = emptyList(),
+                    onMapSelected = {
+                        selectMap = it
+                        searchExpanded = false
+                    },
+                    searchExpanded = { expanded ->
+                        searchExpanded = expanded
+                        onSearchExpanded(expanded)
+                    },
+                    themeViewModel = themeViewModel
                 )
+                if (!searchExpanded) {
+                    ErrorMessage(
+                        message = state.message,
+                        retryViewModel = retryViewModel
+                    )
+                }
             }
         }
     }

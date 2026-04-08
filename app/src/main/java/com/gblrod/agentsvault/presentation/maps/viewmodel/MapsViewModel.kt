@@ -2,6 +2,7 @@ package com.gblrod.agentsvault.presentation.maps.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gblrod.agentsvault.dto.MapDto
 import com.gblrod.agentsvault.dto.MapsUiState
 import com.gblrod.agentsvault.network.RetrofitInstance
 import com.gblrod.agentsvault.presentation.retry.RetryViewModel
@@ -17,6 +18,7 @@ class MapsViewModel : ViewModel() {
     private val _mapsUiState = MutableStateFlow<MapsUiState>(MapsUiState.Loading)
     val mapsUiState: StateFlow<MapsUiState> = _mapsUiState
     private var job: Job? = null
+    var cachedMaps: List<MapDto> = emptyList()
 
     init {
         viewModelScope.launch {
@@ -44,12 +46,19 @@ class MapsViewModel : ViewModel() {
 
             try {
                 val mapsResponse = RetrofitInstance.api.findMaps()
-                _mapsUiState.value = MapsUiState.Success(mapsResponse.data)
+                cachedMaps = mapsResponse.data
+                _mapsUiState.value = MapsUiState.Success(cachedMaps)
+
             } catch (e: IOException) {
-                _mapsUiState.value =
-                    MapsUiState.Error("Erro ao carregar Mapas! \nSem acesso a internet. Verifique sua conexão.")
+                if (cachedMaps.isNotEmpty()) {
+                    _mapsUiState.value = MapsUiState.Success(cachedMaps)
+                } else {
+                    _mapsUiState.value =
+                        MapsUiState.Error("Erro ao carregar Mapas! \nSem acesso a internet. Verifique sua conexão.")
+                }
             } catch (e: HttpException) {
                 _mapsUiState.value = MapsUiState.Error("Erro do servidor: ${e.code()}")
+
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
                 _mapsUiState.value = MapsUiState.Error("Ocorreu um erro inesperado!")

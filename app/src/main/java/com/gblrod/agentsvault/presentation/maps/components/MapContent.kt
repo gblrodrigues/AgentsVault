@@ -11,9 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -36,14 +36,14 @@ fun MapContent(
     currentMap: MapDto?,
     maps: List<MapDto>,
     selectMap: (MapDto) -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    listState: LazyListState
 ) {
     val validMaps = remember(maps) {
         maps.filter {
             it.displayName.isNotBlank() && it.displayIcon != null && it.splash != null
         }
     }
-    val listState = rememberLazyListState()
 
     LaunchedEffect(currentMap) {
         currentMap?.let { selected ->

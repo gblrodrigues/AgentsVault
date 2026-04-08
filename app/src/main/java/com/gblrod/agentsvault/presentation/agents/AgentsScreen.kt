@@ -3,6 +3,7 @@ package com.gblrod.agentsvault.presentation.agents
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,13 +40,13 @@ fun AgentsScreen(
     val favorites by prefsDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
     var searchExpanded by remember { mutableStateOf(false) }
     val uiState by viewModel.agentsUiState.collectAsState()
+    val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         viewModel.observeAgentsRetry(retryViewModel)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         when (val state = uiState) {
             is AgentsUiState.Loading -> {
                 LoadingScreen()
@@ -84,16 +85,32 @@ fun AgentsScreen(
                         paddingValues = paddingValues,
                         showAbilitiesSheet = showAbilitiesSheet,
                         onShowAbilities = { showAbilitiesSheet = true },
-                        onDismissAbilities = { showAbilitiesSheet = false }
+                        onDismissAbilities = { showAbilitiesSheet = false },
+                        listState = listState
                     )
                 }
             }
 
             is AgentsUiState.Error -> {
-                ErrorMessage(
-                    message = state.message,
-                    retryViewModel = retryViewModel
+                AgentSearchBar(
+                    agents = emptyList(),
+                    onAgentSelected = {
+                        selectAgent = it
+                        showAbilitiesSheet = false
+                        searchExpanded = false
+                    },
+                    searchExpanded = { expanded ->
+                        searchExpanded = expanded
+                        onSearchExpanded(expanded)
+                    },
+                    themeViewModel = themeViewModel
                 )
+                if (!searchExpanded) {
+                    ErrorMessage(
+                        message = state.message,
+                        retryViewModel = retryViewModel
+                    )
+                }
             }
         }
     }

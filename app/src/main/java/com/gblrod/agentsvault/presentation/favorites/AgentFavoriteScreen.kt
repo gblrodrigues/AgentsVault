@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -65,12 +66,13 @@ fun AgentFavoriteScreen(
     val scope = rememberCoroutineScope()
     var searchExpanded by remember { mutableStateOf(false) }
     val uiState by viewModel.agentsUiState.collectAsState()
+    val listState = rememberLazyListState()
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        when(val state = uiState) {
+        when (val state = uiState) {
             is AgentsUiState.Loading -> {
                 LoadingScreen()
             }
@@ -173,16 +175,34 @@ fun AgentFavoriteScreen(
                             paddingValues = paddingValues,
                             showAbilitiesSheet = showAbilitiesSheet,
                             onShowAbilities = { showAbilitiesSheet = true },
-                            onDismissAbilities = { showAbilitiesSheet = false }
+                            onDismissAbilities = { showAbilitiesSheet = false },
+                            listState = listState
                         )
                     }
                 }
             }
+
             is AgentsUiState.Error -> {
-                ErrorMessage(
-                    message = state.message,
-                    retryViewModel = retryViewModel
+                AgentSearchBar(
+                    agents = emptyList(),
+                    onAgentSelected = {
+                        selectAgent = it
+                        showAbilitiesSheet = false
+                        searchExpanded = false
+                    },
+                    searchExpanded = { expanded ->
+                        searchExpanded = expanded
+                        onSearchExpanded(expanded)
+                    },
+                    themeViewModel = themeViewModel
                 )
+
+                if (!searchExpanded) {
+                    ErrorMessage(
+                        message = state.message,
+                        retryViewModel = retryViewModel
+                    )
+                }
             }
         }
     }

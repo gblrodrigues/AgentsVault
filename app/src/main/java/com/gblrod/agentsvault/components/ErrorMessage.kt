@@ -57,7 +57,7 @@ fun ErrorMessage(
                 },
             ) {
                 Text(
-                    text = "TENTAR NOVAMENTE",
+                    text = "Tentar Novamente".uppercase(),
                     color = Color.Black
                 )
             }
