@@ -1,4 +1,4 @@
-package com.gblrod.agentsvault.presentation.theme
+package com.gblrod.agentsvault.ui.theme
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -53,7 +53,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.gblrod.agentsvault.dto.AgentDto
+import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
 import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,7 +70,8 @@ fun AgentContent(
     showAbilitiesSheet: Boolean,
     onShowAbilities: () -> Unit,
     onDismissAbilities: () -> Unit,
-    listState: LazyListState
+    listState: LazyListState,
+    viewModel: AgentsViewModel
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
@@ -106,20 +109,20 @@ fun AgentContent(
                     contentDescription = "Personagem",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .padding(top = 180.dp)
+                        .padding(top = 130.dp)
                         .fillMaxHeight(0.65f)
                 )
 
                 Column(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .padding(top = 120.dp),
+                        .padding(top = 105.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth(0.75f)
-                            .height(540.dp),
+                            .height(520.dp),
                         border = BorderStroke(
                             width = 2.dp,
                             color = if (agentIsFavorite) Color.Yellow else MaterialTheme.colorScheme.inverseSurface
@@ -183,8 +186,11 @@ fun AgentContent(
                                                     )
 
                                                     if (result == SnackbarResult.ActionPerformed) {
-                                                        onToggleFavorite(agent.uuid)
-                                                        selectAgent(agent)
+                                                        viewModel.restoreFavorite(agent)
+                                                        scope.launch {
+                                                            delay(50)
+                                                            selectAgent(agent)
+                                                        }
                                                     }
                                                 }
                                                 openDialog = false
@@ -241,7 +247,7 @@ fun AgentContent(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(
-                            bottom = paddingValues.calculateBottomPadding() + 8.dp
+                            bottom = paddingValues.calculateBottomPadding() + 12.dp
                         ),
                     horizontalArrangement = Arrangement.spacedBy(17.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp)

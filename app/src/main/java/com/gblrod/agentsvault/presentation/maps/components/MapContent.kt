@@ -101,7 +101,7 @@ fun MapContent(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(
-                    bottom = paddingValues.calculateBottomPadding() + 8.dp
+                    bottom = paddingValues.calculateBottomPadding() + 12.dp
                 ),
             horizontalArrangement = Arrangement.spacedBy(17.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)

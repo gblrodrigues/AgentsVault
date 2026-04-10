@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.gblrod.agentsvault.navigation.BottomItem
+import com.gblrod.agentsvault.navigation.bottom.BottomItem
 
 @Composable
 fun BottomBar(navHost: NavHostController) {

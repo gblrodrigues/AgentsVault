@@ -12,18 +12,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,14 +29,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.gblrod.agentsvault.components.ThemeMenuButton
 import com.gblrod.agentsvault.dto.AgentDto
-import com.gblrod.agentsvault.presentation.theme.ThemeViewModel
+import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -49,8 +45,8 @@ import kotlinx.coroutines.launch
 fun AgentSearchBar(
     agents: List<AgentDto>,
     onAgentSelected: (AgentDto) -> Unit,
-    searchExpanded: (Boolean) -> Unit,
-    themeViewModel: ThemeViewModel
+    onSearchClose: () -> Unit,
+    viewModel: AgentsViewModel
 ) {
     var query by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
@@ -63,6 +59,8 @@ fun AgentSearchBar(
     val scope = rememberCoroutineScope()
     val focus = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+    val maxChar = agents.maxOfOrNull { it.displayName.length } ?: 9
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -78,148 +76,133 @@ fun AgentSearchBar(
         }
     }
 
-    BackHandler(enabled = expanded) {
-        expanded = false
+    BackHandler {
         query = ""
-        searchExpanded(false)
+        onSearchClose()
     }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        if (!expanded) {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Agents Vault",
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            expanded = true
-                            searchExpanded(true)
+
+        SearchBar(
+            expanded = true,
+            onExpandedChange = {
+                onSearchClose()
+            },
+            modifier = Modifier.fillMaxWidth(),
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = query,
+                    onQueryChange = { queryChange ->
+                        if (queryChange.length <= maxChar) {
+                            query = queryChange
                         }
-                    ) {
+                    },
+                    onSearch = {
+                        scope.launch {
+                            when {
+                                query.isEmpty() -> {
+                                    focus.clearFocus(force = true)
+                                    keyboardController?.hide()
+                                    return@launch
+                                }
+
+                                filteredAgents.isNotEmpty() -> {
+                                    val agentOfQuery = filteredAgents.first()
+
+                                    viewModel.selectAgent(agentOfQuery)
+                                    onAgentSelected(agentOfQuery)
+                                }
+
+                                else -> {
+                                    focusRequester.requestFocus()
+                                }
+                            }
+                        }
+                    },
+                    expanded = true,
+                    onExpandedChange = {
+                        expanded = false
+                    },
+                    placeholder = {
+                        if (filteredAgents.isEmpty()) {
+                            Text(
+                                text = "Vazio",
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        } else {
+                            Text(
+                                text = "$placeHolder",
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    },
+                    leadingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Ícone de Busca",
-                            tint = MaterialTheme.colorScheme.onSurface
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Ícone de Voltar",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier
+                                .clickable {
+                                    query = ""
+                                    onSearchClose()
+                                }
                         )
-                    }
-                    ThemeMenuButton(themeViewModel)
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                )
-            )
-        } else {
-            SearchBar(
-                expanded = true,
-                onExpandedChange = {
-                    expanded = it
-                    searchExpanded(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                inputField = {
-                    SearchBarDefaults.InputField(
-                        query = query,
-                        onQueryChange = {
-                            query = it
-                            expanded = true
-                            searchExpanded(true)
-                        },
-                        onSearch = {
-                            scope.launch {
-                                focus.clearFocus(force = true)
-                                keyboardController?.hide()
-                            }
-                        },
-                        expanded = expanded,
-                        onExpandedChange = {
-                            expanded = it
-                            searchExpanded(it)
-                        },
-                        placeholder = {
-                            if (filteredAgents.isEmpty()) {
-                                Text(
-                                    text = "Vazio",
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            } else {
-                                Text(
-                                    text = "$placeHolder",
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        },
-                        leadingIcon = {
+                    },
+                    trailingIcon = {
+                        if (query.isNotBlank()) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Ícone de Voltar",
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Ícone de Limpar campo",
                                 tint = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier
-                                    .clickable {
-                                        expanded = false
-                                        query = ""
-                                        searchExpanded(false)
-                                    }
+                                modifier = Modifier.clickable {
+                                    query = ""
+                                }
+                            )
+                        }
+                    },
+                    modifier = Modifier.focusRequester(focusRequester),
+                    colors = SearchBarDefaults.inputFieldColors(
+                        cursorColor = MaterialTheme.colorScheme.onSurface
+                    )
+                )
+            },
+            shape = RoundedCornerShape(16.dp),
+            colors = SearchBarDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                dividerColor = MaterialTheme.colorScheme.outline
+            )
+        )
+        {
+            LazyColumn {
+                items(filteredAgents) { agent ->
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = agent.displayName,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         },
-                        trailingIcon = {
-                            if (query.isNotBlank()) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Ícone de Limpar campo",
-                                    tint = MaterialTheme.colorScheme.onSurface,
-                                    modifier = Modifier.clickable {
-                                        query = ""
-                                    }
-                                )
-                            }
+                        leadingContent = {
+                            AsyncImage(
+                                model = agent.displayIcon,
+                                contentDescription = agent.displayName,
+                                modifier = Modifier.size(40.dp)
+                            )
                         },
-                        colors = SearchBarDefaults.inputFieldColors(
-                            cursorColor = MaterialTheme.colorScheme.onSurface
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                viewModel.selectAgent(agent)
+                                onAgentSelected(agent)
+                                query = ""
+                                onSearchClose()
+                            },
+                        colors = ListItemDefaults.colors(
+                            containerColor = MaterialTheme.colorScheme.surface
                         )
                     )
-                },
-                shape = RoundedCornerShape(16.dp),
-                colors = SearchBarDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    dividerColor = MaterialTheme.colorScheme.outline
-                )
-            )
-            {
-                LazyColumn {
-                    items(filteredAgents) { agent ->
-                        ListItem(
-                            headlineContent = {
-                                Text(
-                                    text = agent.displayName,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            },
-                            leadingContent = {
-                                AsyncImage(
-                                    model = agent.displayIcon,
-                                    contentDescription = agent.displayName,
-                                    modifier = Modifier.size(40.dp)
-                                )
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onAgentSelected(agent)
-                                    query = ""
-                                    expanded = false
-                                    searchExpanded(false)
-                                },
-                            colors = ListItemDefaults.colors(
-                                containerColor = MaterialTheme.colorScheme.surface
-                            )
-                        )
-                    }
                 }
             }
         }

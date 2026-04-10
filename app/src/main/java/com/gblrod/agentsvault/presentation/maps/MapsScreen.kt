@@ -14,24 +14,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.gblrod.agentsvault.components.ErrorMessage
 import com.gblrod.agentsvault.components.LoadingScreen
+import com.gblrod.agentsvault.presentation.agents.components.SearchOptions
 import com.gblrod.agentsvault.dto.MapDto
 import com.gblrod.agentsvault.dto.MapsUiState
 import com.gblrod.agentsvault.presentation.maps.components.MapContent
 import com.gblrod.agentsvault.presentation.maps.components.MapSearchBar
 import com.gblrod.agentsvault.presentation.maps.viewmodel.MapsViewModel
 import com.gblrod.agentsvault.presentation.retry.RetryViewModel
-import com.gblrod.agentsvault.presentation.theme.ThemeViewModel
 
 @Composable
 fun MapsScreen(
     viewModel: MapsViewModel,
-    themeViewModel: ThemeViewModel,
-    onSearchExpanded: (Boolean) -> Unit,
     paddingValues: PaddingValues,
-    retryViewModel: RetryViewModel
+    retryViewModel: RetryViewModel,
+    searchType: SearchOptions,
+    onSearchClose: () -> Unit
 ) {
     var selectMap by remember { mutableStateOf<MapDto?>(null) }
-    var searchExpanded by remember { mutableStateOf(false) }
     val uiState by viewModel.mapsUiState.collectAsState()
     val listState = rememberLazyListState()
 
@@ -49,48 +48,48 @@ fun MapsScreen(
             is MapsUiState.Success -> {
                 val maps = state.maps
                 val currentMap = selectMap ?: maps.firstOrNull()
-                MapSearchBar(
-                    maps = maps,
-                    onMapSelected = {
-                        selectMap = it
-                        searchExpanded = false
-                    },
-                    searchExpanded = { expanded ->
-                        searchExpanded = expanded
-                        onSearchExpanded(expanded)
-                    },
-                    themeViewModel = themeViewModel
-                )
+                when {
+                    searchType == SearchOptions.MAP -> {
+                        MapSearchBar(
+                            maps = maps,
+                            onMapSelected = {
+                                selectMap = it
+                                onSearchClose()
+                            },
+                            onSearchClose = { onSearchClose() }
+                        )
+                    }
 
-                if (!searchExpanded) {
-                    MapContent(
-                        maps = maps,
-                        currentMap = currentMap,
-                        selectMap = { selectMap = it },
-                        paddingValues = paddingValues,
-                        listState = listState
-                    )
+                    else -> {
+                        MapContent(
+                            maps = maps,
+                            currentMap = currentMap,
+                            selectMap = { selectMap = it },
+                            paddingValues = paddingValues,
+                            listState = listState
+                        )
+                    }
                 }
             }
 
             is MapsUiState.Error -> {
-                MapSearchBar(
-                    maps = emptyList(),
-                    onMapSelected = {
-                        selectMap = it
-                        searchExpanded = false
-                    },
-                    searchExpanded = { expanded ->
-                        searchExpanded = expanded
-                        onSearchExpanded(expanded)
-                    },
-                    themeViewModel = themeViewModel
-                )
-                if (!searchExpanded) {
-                    ErrorMessage(
-                        message = state.message,
-                        retryViewModel = retryViewModel
-                    )
+                when {
+                    searchType == SearchOptions.MAP -> {
+                        MapSearchBar(
+                            maps = emptyList(),
+                            onMapSelected = {
+                                selectMap = it
+                            },
+                            onSearchClose = { onSearchClose() }
+                        )
+                    }
+
+                    else -> {
+                        ErrorMessage(
+                            message = state.message,
+                            retryViewModel = retryViewModel
+                        )
+                    }
                 }
             }
         }

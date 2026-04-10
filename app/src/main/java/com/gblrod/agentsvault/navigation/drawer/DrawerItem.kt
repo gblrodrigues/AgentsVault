@@ -1,9 +1,9 @@
-package com.gblrod.agentsvault.navigation
+package com.gblrod.agentsvault.navigation.drawer
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
-data class BottomItem(
-    val title: String,
+data class DrawerItem(
+    val label: String,
     val route: String,
     val icon: ImageVector
 )

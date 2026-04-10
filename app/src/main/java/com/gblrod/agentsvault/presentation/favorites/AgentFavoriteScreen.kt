@@ -1,53 +1,28 @@
 package com.gblrod.agentsvault.presentation.favorites
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.gblrod.agentsvault.components.ErrorMessage
 import com.gblrod.agentsvault.components.LoadingScreen
-import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.dto.AgentsUiState
 import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.presentation.agents.components.AgentContent
 import com.gblrod.agentsvault.presentation.agents.components.AgentSearchBar
+import com.gblrod.agentsvault.presentation.agents.components.SearchOptions
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
-import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor
+import com.gblrod.agentsvault.presentation.favorites.components.EmptyFavorites
 import com.gblrod.agentsvault.presentation.retry.RetryViewModel
-import com.gblrod.agentsvault.presentation.theme.ThemeViewModel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,16 +30,13 @@ fun AgentFavoriteScreen(
     viewModel: AgentsViewModel,
     prefsDataStore: PrefsDataStore,
     paddingValues: PaddingValues,
-    onSearchExpanded: (Boolean) -> Unit,
     onFavoriteScreen: () -> Unit,
-    themeViewModel: ThemeViewModel,
-    retryViewModel: RetryViewModel
+    retryViewModel: RetryViewModel,
+    searchType: SearchOptions,
+    onSearchClose: () -> Unit
 ) {
     val favorites by prefsDataStore.agentFavoriteFlow.collectAsState(initial = emptySet())
-    var selectAgent by remember { mutableStateOf<AgentDto?>(null) }
     var showAbilitiesSheet by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-    var searchExpanded by remember { mutableStateOf(false) }
     val uiState by viewModel.agentsUiState.collectAsState()
     val listState = rememberLazyListState()
 
@@ -78,130 +50,89 @@ fun AgentFavoriteScreen(
             }
 
             is AgentsUiState.Success -> {
-                val agents = state.agents
-                val favoriteAgents = agents.filter { agent -> favorites.contains(agent.uuid) }
-                val currentAgent = selectAgent ?: favoriteAgents.firstOrNull()
+                val favoriteAgents = state.agents.filter { favorites.contains(it.uuid) }
+                val selectedAgent by viewModel.selectAgent.collectAsState()
+                val currentAgent = selectedAgent ?: favoriteAgents.firstOrNull()
 
-                LaunchedEffect(key1 = favoriteAgents) {
-                    val current = selectAgent
-                    if (current == null || !favorites.contains(current.uuid)) {
-                        selectAgent = favoriteAgents.firstOrNull()
+                LaunchedEffect(favoriteAgents) {
+                    val current = selectedAgent
+
+                    if (favoriteAgents.isNotEmpty() &&
+                        (current == null || favoriteAgents.none { it.uuid == current.uuid })
+                    ) {
+                        viewModel.selectAgent(favoriteAgents.first())
                     }
                 }
-                if (favoriteAgents.isEmpty() || currentAgent == null) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
 
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Warning,
-                            contentDescription = "Ícone de Sem favorito",
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.size(70.dp)
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Sem agente favorito",
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
-                        )
-
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        Text(
-                            text = "Quando você favoritar agentes, \neles aparecerão aqui.",
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.SemiBold
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = {
-                                onFavoriteScreen()
+                when {
+                    searchType == SearchOptions.AGENT -> {
+                        AgentSearchBar(
+                            agents = favoriteAgents,
+                            onAgentSelected = { agent ->
+                                viewModel.selectAgent(agent)
+                                showAbilitiesSheet = false
+                                onSearchClose()
                             },
-                            modifier = Modifier.fillMaxWidth(0.6f),
-                            shape = RoundedCornerShape(16.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = ButtonAbilityColor
-                            )
-                        ) {
-                            Row {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Ícone de Retornar para main",
-                                    tint = MaterialTheme.colorScheme.onSurface,
-                                    modifier = Modifier.padding(horizontal = 7.dp)
-                                )
-
-                                Text(
-                                    text = "Favoritar Agentes",
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
+                            onSearchClose = {
+                                onSearchClose()
+                            },
+                            viewModel = viewModel
+                        )
                     }
-                } else {
-                    AgentSearchBar(
-                        agents = favoriteAgents,
-                        onAgentSelected = {
-                            selectAgent = it
-                            showAbilitiesSheet = false
-                            searchExpanded = false
-                        },
-                        searchExpanded = { expanded ->
-                            searchExpanded = expanded
-                            onSearchExpanded(expanded)
-                        },
-                        themeViewModel = themeViewModel
-                    )
 
-                    if (!searchExpanded) {
+                    favoriteAgents.isEmpty() || currentAgent == null -> {
+                        EmptyFavorites(
+                            onFavoriteClick = {
+                                onFavoriteScreen()
+                            }
+                        )
+                    }
+
+                    else -> {
                         AgentContent(
                             agents = favoriteAgents,
-                            currentAgent = currentAgent,
                             favorites = favorites,
-                            selectAgent = { selectAgent = it },
+                            selectAgent = { agent ->
+                                viewModel.selectAgent(agent)
+                            },
                             onToggleFavorite = { uuid ->
-                                scope.launch {
-                                    prefsDataStore.toggleFavorite(uuid)
-                                }
+                                viewModel.toggleFavorite(uuid)
                             },
                             paddingValues = paddingValues,
                             showAbilitiesSheet = showAbilitiesSheet,
                             onShowAbilities = { showAbilitiesSheet = true },
                             onDismissAbilities = { showAbilitiesSheet = false },
-                            listState = listState
+                            listState = listState,
+                            currentAgent = currentAgent,
+                            viewModel = viewModel
                         )
                     }
                 }
             }
 
             is AgentsUiState.Error -> {
-                AgentSearchBar(
-                    agents = emptyList(),
-                    onAgentSelected = {
-                        selectAgent = it
-                        showAbilitiesSheet = false
-                        searchExpanded = false
-                    },
-                    searchExpanded = { expanded ->
-                        searchExpanded = expanded
-                        onSearchExpanded(expanded)
-                    },
-                    themeViewModel = themeViewModel
-                )
+                when {
+                    searchType == SearchOptions.AGENT -> {
+                        AgentSearchBar(
+                            agents = emptyList(),
+                            onAgentSelected = { agent ->
+                                viewModel.selectAgent(agent)
+                                showAbilitiesSheet = false
+                                onSearchClose()
+                            },
+                            onSearchClose = {
+                                onSearchClose()
+                            },
+                            viewModel = viewModel
+                        )
+                    }
 
-                if (!searchExpanded) {
-                    ErrorMessage(
-                        message = state.message,
-                        retryViewModel = retryViewModel
-                    )
+                    else -> {
+                        ErrorMessage(
+                            message = state.message,
+                            retryViewModel = retryViewModel
+                        )
+                    }
                 }
             }
         }

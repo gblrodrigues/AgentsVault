@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.dto.AgentsUiState
+import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.network.RetrofitInstance
 import com.gblrod.agentsvault.presentation.retry.RetryViewModel
 import kotlinx.coroutines.CancellationException
@@ -15,11 +16,14 @@ import okio.IOException
 import retrofit2.HttpException
 
 class AgentsViewModel(
+    private val prefsDataStore: PrefsDataStore
 ) : ViewModel() {
     private val _agentsUiState = MutableStateFlow<AgentsUiState>(AgentsUiState.Loading)
     val agentsUiState: StateFlow<AgentsUiState> = _agentsUiState
     private var job: Job? = null
-    var cachedAgents: List<AgentDto> = emptyList()
+    private var cachedAgents: List<AgentDto> = emptyList()
+    private val _selectedAgent = MutableStateFlow<AgentDto?>(null)
+    val selectAgent: StateFlow<AgentDto?> = _selectedAgent
 
     init {
         viewModelScope.launch {
@@ -66,5 +70,21 @@ class AgentsViewModel(
                 _agentsUiState.value = AgentsUiState.Error("Ocorreu um erro inesperado!")
             }
         }
+    }
+
+    fun selectAgent(agent: AgentDto) {
+        _selectedAgent.value = agent
+    }
+
+    fun toggleFavorite(uuid: String) {
+        viewModelScope.launch {
+            prefsDataStore.toggleFavorite(uuid)
+        }
+    }
+
+    fun restoreFavorite(agent: AgentDto) {
+        toggleFavorite(agent.uuid)
+
+        _selectedAgent.value = agent
     }
 }

@@ -1,8 +1,7 @@
-package com.gblrod.agentsvault.presentation.theme
+package com.gblrod.agentsvault.ui.theme
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gblrod.agentsvault.components.ThemeOptions
 import com.gblrod.agentsvault.local.PrefsDataStore
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
