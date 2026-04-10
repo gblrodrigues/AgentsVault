@@ -51,7 +51,7 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 
 ## Demonstração
 Abaixo irei disponibilizar um vídeo mostrando como o aplicativo está:
-> https://github.com/user-attachments/assets/c6cbcd82-64b3-43d9-b173-c7a89279e137
+> https://github.com/user-attachments/assets/e5c18a96-b015-426b-a0cc-9beae4b39d24
 
 ## Tomadas de Decisões
 
