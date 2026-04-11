@@ -19,6 +19,7 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 - [Material 3](https://m3.material.io/) — Utilizado para manter consistência visual e boas práticas de UI
 - Arquitetura MVVM — Organização do projeto utilizando ViewModel e StateFlow para gerenciamento de estado e separação de responsabilidades.
 - [Retrofit](https://square.github.io/retrofit/) — Cliente HTTP para consumo da API REST.
+- [Koin](https://insert-koin.io/) — Utilizado para gerenciar dependências do app de forma mais organizada e sem complicações.
 - [Coil](https://coil-kt.github.io/coil/compose/) — Carregamento assíncrono de imagens via URL (AsyncImage)
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) — Persistência de dados local utilizada para salvar agentes favoritados.
 - [Splash Screen](https://developer.android.com/develop/ui/views/launch/splash-screen) — Tela de abertura com logo e fundo para melhorar a experiência inicial do app.
