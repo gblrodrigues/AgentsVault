@@ -1,7 +1,8 @@
-package com.gblrod.agentsvault.ui.theme
+package com.gblrod.agentsvault.presentation.theme.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gblrod.agentsvault.presentation.theme.ThemeOptions
 import com.gblrod.agentsvault.local.PrefsDataStore
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -13,8 +14,8 @@ class ThemeViewModel(
     val theme = repository.getTheme()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
-            initialValue = ThemeOptions.SYSTEM
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
         )
 
     fun setTheme(theme: ThemeOptions) {

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.dto.AgentsUiState
 import com.gblrod.agentsvault.local.PrefsDataStore
-import com.gblrod.agentsvault.network.RetrofitInstance
-import com.gblrod.agentsvault.presentation.retry.RetryViewModel
+import com.gblrod.agentsvault.network.API
+import com.gblrod.agentsvault.presentation.retry.viewmodel.RetryViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +16,7 @@ import okio.IOException
 import retrofit2.HttpException
 
 class AgentsViewModel(
+    val api: API,
     private val prefsDataStore: PrefsDataStore
 ) : ViewModel() {
     private val _agentsUiState = MutableStateFlow<AgentsUiState>(AgentsUiState.Loading)
@@ -50,7 +51,7 @@ class AgentsViewModel(
             }
 
             try {
-                val agentsResponse = RetrofitInstance.api.findAgents()
+                val agentsResponse = api.findAgents()
                 cachedAgents = agentsResponse.data
                 _agentsUiState.value = AgentsUiState.Success(cachedAgents)
 

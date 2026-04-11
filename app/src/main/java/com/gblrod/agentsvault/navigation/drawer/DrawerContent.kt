@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.gblrod.agentsvault.ui.theme.ThemeViewModel
+import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
 
 @Composable
 fun DrawerContent(
@@ -36,7 +36,7 @@ fun DrawerContent(
 ) {
     val currentRoute = navHost.currentBackStackEntryAsState().value?.destination?.route
     var showThemeDialog by remember { mutableStateOf(false) }
-    val theme = themeViewModel.theme.collectAsState().value.label
+    val theme = themeViewModel.theme.collectAsState().value!!.label
     val items = listOf(
         DrawerItem(
             label = "Agentes",

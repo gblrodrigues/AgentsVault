@@ -4,9 +4,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
@@ -39,7 +39,7 @@ fun BottomBar(navHost: NavHostController) {
     )
     val currentRoute = navHost.currentBackStackEntryAsState().value?.destination?.route
 
-    BottomAppBar(
+    NavigationBar(
         containerColor = Color.Transparent
     ) {
         items.forEach { item ->

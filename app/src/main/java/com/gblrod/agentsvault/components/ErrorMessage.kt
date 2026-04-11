@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.gblrod.agentsvault.presentation.retry.RetryViewModel
+import com.gblrod.agentsvault.presentation.retry.viewmodel.RetryViewModel
 import kotlinx.coroutines.delay
 
 @Composable

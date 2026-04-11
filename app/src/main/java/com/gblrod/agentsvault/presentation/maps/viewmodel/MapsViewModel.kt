@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gblrod.agentsvault.dto.MapDto
 import com.gblrod.agentsvault.dto.MapsUiState
-import com.gblrod.agentsvault.network.RetrofitInstance
-import com.gblrod.agentsvault.presentation.retry.RetryViewModel
+import com.gblrod.agentsvault.network.API
+import com.gblrod.agentsvault.presentation.retry.viewmodel.RetryViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,9 @@ import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
 
-class MapsViewModel : ViewModel() {
+class MapsViewModel(
+    private val api: API
+) : ViewModel() {
     private val _mapsUiState = MutableStateFlow<MapsUiState>(MapsUiState.Loading)
     val mapsUiState: StateFlow<MapsUiState> = _mapsUiState
     private var job: Job? = null
@@ -45,7 +47,7 @@ class MapsViewModel : ViewModel() {
             }
 
             try {
-                val mapsResponse = RetrofitInstance.api.findMaps()
+                val mapsResponse = api.findMaps()
                 cachedMaps = mapsResponse.data
                 _mapsUiState.value = MapsUiState.Success(cachedMaps)
 

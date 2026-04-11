@@ -2,30 +2,31 @@ package com.gblrod.agentsvault.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.gblrod.agentsvault.presentation.agents.components.SearchOptions
 import com.gblrod.agentsvault.local.PrefsDataStore
-import com.gblrod.agentsvault.presentation.favorites.AgentFavoriteScreen
 import com.gblrod.agentsvault.presentation.agents.AgentsScreen
-import com.gblrod.agentsvault.presentation.maps.MapsScreen
+import com.gblrod.agentsvault.presentation.agents.components.SearchOptions
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
+import com.gblrod.agentsvault.presentation.favorites.AgentFavoriteScreen
+import com.gblrod.agentsvault.presentation.maps.MapsScreen
 import com.gblrod.agentsvault.presentation.maps.viewmodel.MapsViewModel
-import com.gblrod.agentsvault.presentation.retry.RetryViewModel
+import com.gblrod.agentsvault.presentation.retry.viewmodel.RetryViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
-fun NavHostController(
+fun NavigationGraph(
     navHost: NavHostController,
-    repository: PrefsDataStore,
     paddingValues: PaddingValues,
     searchType: SearchOptions,
     onSearchClose: () -> Unit
 ) {
-    val agentsViewModel: AgentsViewModel = viewModel()
-    val mapsViewModel: MapsViewModel = viewModel()
-    val retryViewModel: RetryViewModel = viewModel()
+    val agentsViewModel: AgentsViewModel = koinViewModel()
+    val mapsViewModel: MapsViewModel = koinViewModel()
+    val retryViewModel: RetryViewModel = koinViewModel()
+    val repository: PrefsDataStore = koinInject()
 
     NavHost(
         navController = navHost,

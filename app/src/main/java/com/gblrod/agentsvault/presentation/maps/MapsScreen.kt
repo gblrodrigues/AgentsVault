@@ -20,7 +20,7 @@ import com.gblrod.agentsvault.dto.MapsUiState
 import com.gblrod.agentsvault.presentation.maps.components.MapContent
 import com.gblrod.agentsvault.presentation.maps.components.MapSearchBar
 import com.gblrod.agentsvault.presentation.maps.viewmodel.MapsViewModel
-import com.gblrod.agentsvault.presentation.retry.RetryViewModel
+import com.gblrod.agentsvault.presentation.retry.viewmodel.RetryViewModel
 
 @Composable
 fun MapsScreen(

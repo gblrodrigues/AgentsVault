@@ -22,7 +22,7 @@ import com.gblrod.agentsvault.presentation.agents.components.AgentSearchBar
 import com.gblrod.agentsvault.presentation.agents.components.SearchOptions
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
 import com.gblrod.agentsvault.presentation.favorites.components.EmptyFavorites
-import com.gblrod.agentsvault.presentation.retry.RetryViewModel
+import com.gblrod.agentsvault.presentation.retry.viewmodel.RetryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

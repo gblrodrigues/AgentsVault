@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.gblrod.agentsvault.ui.theme.ThemeOptions
-import com.gblrod.agentsvault.ui.theme.ThemeViewModel
+import com.gblrod.agentsvault.presentation.theme.ThemeOptions
+import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
 import com.gblrod.agentsvault.ui.theme.ContainerButtonDialog
 
 @Composable
@@ -81,7 +81,7 @@ fun ThemeMenu(
         confirmButton = {
             TextButton(
                 onClick = {
-                    themeViewModel.setTheme(selectedTheme)
+                    themeViewModel.setTheme(selectedTheme!!)
                     onDismiss()
                 },
                 colors = ButtonDefaults.buttonColors(

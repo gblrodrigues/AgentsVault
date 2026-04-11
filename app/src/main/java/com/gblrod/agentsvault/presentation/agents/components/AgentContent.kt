@@ -159,7 +159,7 @@ fun AgentContent(
                                             if (agentIsFavorite) {
                                                 openDialog = true
                                             } else {
-                                                onToggleFavorite(agent.uuid)
+                                                viewModel.toggleFavorite(agent.uuid)
                                             }
                                         },
                                         modifier = Modifier.align(Alignment.TopEnd)
@@ -177,7 +177,7 @@ fun AgentContent(
                                             description = "Tem certeza que quer remover ${agent.displayName} dos seus favoritos?",
                                             onConfirm = {
                                                 removedAgent = agent
-                                                onToggleFavorite(agent.uuid)
+                                                viewModel.toggleFavorite(agent.uuid)
                                                 scope.launch {
                                                     val result = snackbarHostState.showSnackbar(
                                                         message = "Agente ${currentAgent.displayName} desfavoritado!",
@@ -278,7 +278,7 @@ fun AgentContent(
                 hostState = snackbarHostState,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 265.dp)
+                    .padding(bottom = paddingValues.calculateBottomPadding() + 70.dp)
             )
         }
     }

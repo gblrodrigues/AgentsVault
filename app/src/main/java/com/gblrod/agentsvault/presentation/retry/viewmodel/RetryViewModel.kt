@@ -1,4 +1,4 @@
-package com.gblrod.agentsvault.presentation.retry
+package com.gblrod.agentsvault.presentation.retry.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
