@@ -73,7 +73,7 @@ fun ThemeMenu(
                             )
                         )
                         Text(
-                            text = theme.label,
+                            text = stringResource(id = theme.label),
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }

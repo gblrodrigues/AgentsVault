@@ -1,0 +1,81 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">AgentsVault</string>
+
+    <!-- Favorites -->
+    <string name="favorite_remove_title">Quitar %1$s de favoritos</string>
+    <string name="favorite_remove_description">¿Seguro que quieres quitar a %1$s de tus favoritos?</string>
+    <string name="favorite_remove_success">¡Agente %1$s quitado!</string>
+    <string name="favorite_dialog_confirm">Confirmar</string>
+    <string name="favorite_dialog_dismiss">Cancelar</string>
+    <string name="cd_favorite_toggle">Icono favorito</string>
+    <string name="cd_favorite_empty_icon">Icono sin favoritos</string>
+    <string name="cd_favorite_back_button_icon">Icono de volver</string>
+    <string name="cd_favorite_back_button">Favorito Agentes</string>
+    <string name="favorite_empty_list_title">Sin ¡agente favorito</string>
+    <string name="favorite_empty_list_description" tools:ignore="Typos">Cuando añadas agentes a favoritos, \naparecerán aquí.</string>
+
+    <!-- Theme -->
+    <string name="theme_dialog_title">Selecciona un tema</string>
+    <string name="theme_dialog_confirm">Aplicar</string>
+    <string name="theme_dialog_dismiss">Cancelar</string>
+    <string name="theme_darkmode">Oscuro</string>
+    <string name="theme_lightmode">Claro</string>
+    <string name="theme_system">Sistema</string>
+
+    <!-- Snackbar -->
+    <string name="snackbar_undo">Deshacer</string>
+
+    <!-- Buttons -->
+    <string name="button_show_abilities">Ver Habilidades</string>
+    <string name="button_retry">Intentar otra vez</string>
+
+    <!-- BottomBar -->
+    <string name="bottombar_title_agents">Agentes</string>
+    <string name="bottombar_title_maps">Mapas</string>
+    <string name="bottombar_title_agents_favorites">Agentes Favoritos</string>
+
+    <!-- Loading Screen -->
+    <string name="label_loading" tools:ignore="TypographyEllipsis">Cargando...</string>
+
+    <!-- TopBar -->
+    <string name="cd_navigation_icon">Menu</string>
+    <string name="topbar_title">Agents Vault</string>
+    <string name="topbar_search_cd">Icono de Pesquisa</string>
+    <string name="topbar_agent_selected_cd">Imagem del agente seleccionado</string>
+    <string name="topbar_agent_no_selected_cd">Icono padrão</string>
+
+    <!-- NavigationDrawer -->
+    <string name="drawer_title">Agents Vault</string>
+    <string name="drawer_item_themes_cd">Temas</string>
+    <string name="drawer_item_label_agents">Agentes</string>
+    <string name="drawer_item_label_agents_favorites">Agentes Favoritos</string>
+    <string name="drawer_item_label_maps">Mapas</string>
+    <string name="drawer_item_label_themes">Temas</string>
+
+    <!-- BottomSheet -->
+    <string name="cd_agent_ability_icon">Icono da habilidade</string>
+
+    <!-- SearchBar -->
+    <string name="searchbar_placeholder_empty">Vacío</string>
+    <string name="searchbar_cd_leading_icon">Icono de Volver</string>
+    <string name="searchbar_cd_trailing_icon">Icono de Borrar campo</string>
+
+    <!-- AgentsUiState -->
+    <string name="agents_ui_state_ioexception">¡Error al cargar agentes! \nSin conexión a Internet. Verifica tu conexión.</string>
+    <string name="agents_ui_state_httpexception">Error do servidor: %1$d</string>
+    <string name="agents_ui_state_cancellationexception">¡Ha ocurrido un error inesperado!</string>
+
+    <!-- MapsUiState -->
+    <string name="maps_ui_state_ioexception">¡Error al cargar mapas! \nSin conexión a Internet. Verifica tu conexión.</string>
+    <string name="maps_ui_state_httpexception">Error do servidor: %1$d</string>
+    <string name="maps_ui_state_cancellationexception">¡Ha ocurrido un error inesperado!</string>
+
+    <!-- Agents -->
+    <string name="cd_agent_image">Imagem do agente</string>
+    <string name="cd_agent_role_icon">Icono de la función del agente</string>
+
+    <!-- Maps -->
+    <string name="cd_map_image_display">Imagem do mapa (Display)</string>
+    <string name="cd_map_image_splash">Imagem do mapa (Splash)</string>
+    <string name="map_not_available">Mapa no disponible</string>
+</resources>

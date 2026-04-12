@@ -18,12 +18,15 @@
     <string name="theme_dialog_title">Escolha um tema</string>
     <string name="theme_dialog_confirm">Aplicar</string>
     <string name="theme_dialog_dismiss">Cancelar</string>
+    <string name="theme_darkmode">Escuro</string>
+    <string name="theme_lightmode">Claro</string>
+    <string name="theme_system">Sistema</string>
 
     <!-- Snackbar -->
     <string name="snackbar_undo">Desfazer</string>
 
     <!-- Buttons -->
-    <string name="button_show_abilities">Ver Skills</string>
+    <string name="button_show_abilities">Ver Habilidades</string>
     <string name="button_retry">Tentar novamente</string>
 
     <!-- BottomBar -->

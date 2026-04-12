@@ -88,7 +88,7 @@ fun DrawerContent(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = theme,
+                    text = stringResource(id = theme),
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
