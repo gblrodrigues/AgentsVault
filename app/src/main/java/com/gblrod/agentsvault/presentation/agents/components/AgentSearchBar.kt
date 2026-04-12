@@ -33,8 +33,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
 import kotlinx.coroutines.delay
@@ -128,7 +130,7 @@ fun AgentSearchBar(
                     placeholder = {
                         if (filteredAgents.isEmpty()) {
                             Text(
-                                text = "Vazio",
+                                text = stringResource(id = R.string.searchbar_placeholder_empty),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         } else {
@@ -141,7 +143,7 @@ fun AgentSearchBar(
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Ícone de Voltar",
+                            contentDescription = stringResource(id = R.string.searchbar_cd_leading_icon),
                             tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .clickable {
@@ -154,7 +156,7 @@ fun AgentSearchBar(
                         if (query.isNotBlank()) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = "Ícone de Limpar campo",
+                                contentDescription = stringResource(id = R.string.searchbar_cd_trailing_icon),
                                 tint = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.clickable {
                                     query = ""

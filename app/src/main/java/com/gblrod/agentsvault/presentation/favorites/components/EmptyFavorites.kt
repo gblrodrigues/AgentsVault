@@ -21,10 +21,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor
 
 @Composable
@@ -39,14 +41,14 @@ fun EmptyFavorites(
     ) {
         Icon(
             imageVector = Icons.Default.Warning,
-            contentDescription = "Ícone de Sem favorito",
+            contentDescription = stringResource(id = R.string.cd_favorite_empty_icon),
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(70.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Sem agente favorito",
+            text = stringResource(id = R.string.favorite_empty_list_title),
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp
@@ -55,7 +57,7 @@ fun EmptyFavorites(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "Quando você favoritar agentes, \neles aparecerão aqui.",
+            text = stringResource(id = R.string.favorite_empty_list_description),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
@@ -76,13 +78,13 @@ fun EmptyFavorites(
             Row {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Ícone de Retornar para main",
+                    contentDescription = stringResource(id = R.string.cd_favorite_back_button_icon),
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 7.dp)
                 )
 
                 Text(
-                    text = "Favoritar Agentes",
+                    text = stringResource(id = R.string.cd_favorite_back_button),
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }

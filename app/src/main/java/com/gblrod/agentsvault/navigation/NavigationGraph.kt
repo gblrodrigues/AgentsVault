@@ -30,10 +30,10 @@ fun NavigationGraph(
 
     NavHost(
         navController = navHost,
-        startDestination = "main",
+        startDestination = Routes.Agents.route,
     )
     {
-        composable("main") {
+        composable(route = Routes.Agents.route) {
 
             AgentsScreen(
                 viewModel = agentsViewModel,
@@ -45,7 +45,7 @@ fun NavigationGraph(
             )
         }
 
-        composable("favorites") {
+        composable(route = Routes.Favorites.route) {
             AgentFavoriteScreen(
                 viewModel = agentsViewModel,
                 onFavoriteScreen = { navHost.popBackStack() },
@@ -57,7 +57,7 @@ fun NavigationGraph(
             )
         }
 
-        composable("maps") {
+        composable(route = Routes.Maps.route) {
             MapsScreen(
                 viewModel = mapsViewModel,
                 paddingValues = paddingValues,

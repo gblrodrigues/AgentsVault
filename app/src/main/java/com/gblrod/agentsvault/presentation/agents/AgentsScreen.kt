@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.gblrod.agentsvault.components.ErrorMessage
 import com.gblrod.agentsvault.components.LoadingScreen
 import com.gblrod.agentsvault.dto.AgentsUiState
@@ -98,6 +99,12 @@ fun AgentsScreen(
             }
 
             is AgentsUiState.Error -> {
+                val message = if (state.code == null) {
+                    stringResource(id = state.messageResId)
+                } else {
+                    stringResource(id = state.messageResId, state.code)
+                }
+
                 when {
                     searchType == SearchOptions.AGENT -> {
                         AgentSearchBar(
@@ -114,7 +121,7 @@ fun AgentsScreen(
 
                     else -> {
                         ErrorMessage(
-                            message = state.message,
+                            message = message,
                             retryViewModel = retryViewModel
                         )
                     }

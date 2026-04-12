@@ -22,10 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.gblrod.agentsvault.R
+import com.gblrod.agentsvault.navigation.Routes
 import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
 
 @Composable
@@ -39,24 +42,24 @@ fun DrawerContent(
     val theme = themeViewModel.theme.collectAsState().value!!.label
     val items = listOf(
         DrawerItem(
-            label = "Agentes",
-            route = "main",
+            label = stringResource(id = R.string.drawer_item_label_agents),
+            route = Routes.Agents.route,
             icon = Icons.Default.Groups
         ),
         DrawerItem(
-            label = "Agentes Favoritos",
-            route = "favorites",
+            label = stringResource(id = R.string.drawer_item_label_agents_favorites),
+            route = Routes.Favorites.route,
             icon = Icons.Default.Star
         ),
         DrawerItem(
-            label = "Mapas",
-            route = "maps",
+            label = stringResource(id = R.string.drawer_item_label_maps),
+            route = Routes.Maps.route,
             icon = Icons.Default.Map
         )
     )
 
     Text(
-        text = "Agents Vault",
+        text = stringResource(id = R.string.drawer_title),
         fontSize = 24.sp,
         color = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier.padding(16.dp)
@@ -70,7 +73,7 @@ fun DrawerContent(
         icon = {
             Icon(
                 imageVector = Icons.Default.Palette,
-                contentDescription = "Temas",
+                contentDescription = stringResource(id = R.string.drawer_item_themes_cd),
                 tint = MaterialTheme.colorScheme.onSurface
             )
         },
@@ -81,7 +84,7 @@ fun DrawerContent(
                     .padding(vertical = 4.dp)
             ) {
                 Text(
-                    text = "Temas",
+                    text = stringResource(id = R.string.drawer_item_label_themes),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
@@ -122,7 +125,7 @@ fun DrawerContent(
             selected = currentRoute == item.route,
             onClick = {
                 navHost.navigate(item.route) {
-                    popUpTo("main") {
+                    popUpTo(route = Routes.Agents.route) {
                         saveState = true
                     }
                     launchSingleTop = true

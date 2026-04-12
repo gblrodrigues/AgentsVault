@@ -48,10 +48,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
 import com.gblrod.agentsvault.ui.theme.ButtonAbilityColor
@@ -106,7 +108,7 @@ fun AgentContent(
             ) {
                 AsyncImage(
                     model = agent.fullPortrait,
-                    contentDescription = "Personagem",
+                    contentDescription = stringResource(id = R.string.cd_agent_image),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .padding(top = 130.dp)
@@ -166,22 +168,35 @@ fun AgentContent(
                                     ) {
                                         Icon(
                                             imageVector = if (agentIsFavorite) Icons.Default.Star else Icons.Default.StarBorder,
-                                            contentDescription = "Ícone de favoritar",
+                                            contentDescription = stringResource(id = R.string.cd_favorite_toggle),
                                             tint = if (agentIsFavorite) Color.Yellow else MaterialTheme.colorScheme.onSurface,
                                             modifier = Modifier.size(50.dp)
                                         )
                                     }
                                     if (openDialog) {
+                                        val message = stringResource(
+                                            id = R.string.favorite_remove_success,
+                                            currentAgent.displayName
+                                        )
+                                        val undoTextAction =
+                                            stringResource(id = R.string.snackbar_undo)
+
                                         AgentDialogFavorite(
-                                            title = "Desfavoritar ${agent.displayName}",
-                                            description = "Tem certeza que quer remover ${agent.displayName} dos seus favoritos?",
+                                            title = stringResource(
+                                                id = R.string.favorite_remove_title,
+                                                currentAgent.displayName
+                                            ),
+                                            description = stringResource(
+                                                id = R.string.favorite_remove_description,
+                                                currentAgent.displayName
+                                            ),
                                             onConfirm = {
                                                 removedAgent = agent
                                                 viewModel.toggleFavorite(agent.uuid)
                                                 scope.launch {
                                                     val result = snackbarHostState.showSnackbar(
-                                                        message = "Agente ${currentAgent.displayName} desfavoritado!",
-                                                        actionLabel = "Desfazer",
+                                                        message = message,
+                                                        actionLabel = undoTextAction,
                                                         duration = SnackbarDuration.Short
                                                     )
 
@@ -209,7 +224,7 @@ fun AgentContent(
                                 ) {
                                     AsyncImage(
                                         model = agent.role.displayIcon,
-                                        contentDescription = "Ícone da função",
+                                        contentDescription = stringResource(id = R.string.cd_agent_role_icon),
                                         modifier = Modifier.size(14.dp),
                                         colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface)
                                     )
@@ -234,7 +249,7 @@ fun AgentContent(
                                 )
                             ) {
                                 Text(
-                                    text = "Ver Skills",
+                                    text = stringResource(id = R.string.button_show_abilities),
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                             }

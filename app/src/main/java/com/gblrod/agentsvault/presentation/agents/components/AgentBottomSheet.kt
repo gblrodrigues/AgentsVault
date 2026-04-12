@@ -19,7 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.ui.theme.BackGroundCardColorOne
 import com.gblrod.agentsvault.ui.theme.BackGroundCardColorTwo
 
@@ -60,7 +62,7 @@ fun AgentBottomSheet(
                     Row {
                         AsyncImage(
                             model = it.displayIcon,
-                            contentDescription = "Ícones das habilidades",
+                            contentDescription = stringResource(id = R.string.cd_agent_ability_icon),
                             modifier = Modifier.size(45.dp),
                             colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface)
                         )

@@ -25,10 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.dto.MapDto
 
 @Composable
@@ -59,7 +61,7 @@ fun MapContent(
     ) {
         AsyncImage(
             model = currentMap?.displayIcon,
-            contentDescription = "ícone do Mapa (Central)",
+            contentDescription = stringResource(id = R.string.cd_map_image_display),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .padding(top = 170.dp)
@@ -86,7 +88,8 @@ fun MapContent(
                             .padding(vertical = 100.dp)
                     ) {
                         Text(
-                            text = currentMap?.displayName?.uppercase() ?: "N/A",
+                            text = currentMap?.displayName?.uppercase()
+                                ?: stringResource(id = R.string.map_not_available),
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -122,7 +125,7 @@ fun MapContent(
                 ) {
                     AsyncImage(
                         model = item.splash,
-                        contentDescription = "Ícone do Mapa (Bottom)",
+                        contentDescription = stringResource(id = R.string.cd_map_image_splash),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )

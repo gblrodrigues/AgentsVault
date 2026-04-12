@@ -2,6 +2,7 @@ package com.gblrod.agentsvault.presentation.agents.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.dto.AgentDto
 import com.gblrod.agentsvault.dto.AgentsUiState
 import com.gblrod.agentsvault.local.PrefsDataStore
@@ -60,15 +61,19 @@ class AgentsViewModel(
                     _agentsUiState.value = AgentsUiState.Success(cachedAgents)
                 } else {
                     _agentsUiState.value =
-                        AgentsUiState.Error("Erro ao carregar Agentes! \nSem acesso a internet. Verifique sua conexão.")
+                        AgentsUiState.Error(messageResId = R.string.agents_ui_state_ioexception)
                 }
 
             } catch (e: HttpException) {
-                _agentsUiState.value = AgentsUiState.Error("Erro do servidor: ${e.code()}")
+                _agentsUiState.value = AgentsUiState.Error(
+                    messageResId = R.string.agents_ui_state_httpexception,
+                    code = e.code()
+                )
 
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
-                _agentsUiState.value = AgentsUiState.Error("Ocorreu um erro inesperado!")
+                _agentsUiState.value =
+                    AgentsUiState.Error(messageResId = R.string.agents_ui_state_cancellationexception)
             }
         }
     }

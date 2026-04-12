@@ -7,6 +7,7 @@ sealed class MapsUiState {
     ) : MapsUiState()
 
     data class Error(
-        val message: String
+        val messageResId: Int,
+        val code: Int? = null
     ) : MapsUiState()
 }

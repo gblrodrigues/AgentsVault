@@ -7,6 +7,7 @@ sealed class AgentsUiState {
     ) : AgentsUiState()
 
     data class Error(
-        val message: String
+        val messageResId: Int,
+        val code: Int? = null
     ) : AgentsUiState()
 }

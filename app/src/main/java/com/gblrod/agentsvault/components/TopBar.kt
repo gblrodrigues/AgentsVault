@@ -20,8 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +42,7 @@ fun TopBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "Menu",
+                    contentDescription = stringResource(id = R.string.cd_navigation_icon),
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(28.dp)
                 )
@@ -48,7 +50,7 @@ fun TopBar(
         },
         title = {
             Text(
-                text = "Agents Vault",
+                text = stringResource(id = R.string.topbar_title),
                 color = MaterialTheme.colorScheme.onSurface
             )
         },
@@ -60,7 +62,7 @@ fun TopBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Search,
-                    contentDescription = "Search",
+                    contentDescription = stringResource(id = R.string.topbar_search_cd),
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(28.dp)
                 )
@@ -68,7 +70,7 @@ fun TopBar(
             if (selectedAgent != null) {
                 AsyncImage(
                     model = selectedAgent?.displayIcon,
-                    contentDescription = "Ícone do agente selecionado",
+                    contentDescription = stringResource(id = R.string.topbar_agent_selected_cd),
                     modifier = Modifier
                         .padding(start = 8.dp, end = 16.dp)
                         .size(40.dp)
@@ -77,7 +79,7 @@ fun TopBar(
             } else {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Ícone padrão",
+                    contentDescription = stringResource(id = R.string.topbar_agent_no_selected_cd),
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .padding(start = 8.dp, end = 16.dp)

@@ -13,8 +13,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.ui.theme.ContainerButtonDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +60,7 @@ fun AgentDialogFavorite(
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Text(
-                    text = "Confirmar",
+                    text = stringResource(id = R.string.favorite_dialog_confirm),
                     color = MaterialTheme.colorScheme.inverseSurface
                 )
             }
@@ -76,7 +78,7 @@ fun AgentDialogFavorite(
                 ),
             ) {
                 Text(
-                    text = "Cancelar",
+                    text = stringResource(id = R.string.favorite_dialog_dismiss),
                     color = ContainerButtonDialog
                 )
             }

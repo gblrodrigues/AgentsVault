@@ -23,8 +23,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.presentation.theme.ThemeOptions
 import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
 import com.gblrod.agentsvault.ui.theme.ContainerButtonDialog
@@ -51,7 +53,7 @@ fun ThemeMenu(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "Escolha um tema"
+                text = stringResource(id = R.string.theme_dialog_title)
             )
         },
         text = {
@@ -90,7 +92,7 @@ fun ThemeMenu(
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Text(
-                    text = "Aplicar",
+                    text = stringResource(id = R.string.theme_dialog_confirm),
                     color = MaterialTheme.colorScheme.inverseSurface
                 )
             }
@@ -108,7 +110,7 @@ fun ThemeMenu(
                 ),
             ) {
                 Text(
-                    text = "Cancelar",
+                    text = stringResource(id = R.string.theme_dialog_dismiss),
                     color = ContainerButtonDialog
                 )
             }

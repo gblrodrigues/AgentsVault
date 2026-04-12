@@ -12,28 +12,31 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.gblrod.agentsvault.R
+import com.gblrod.agentsvault.navigation.Routes
 import com.gblrod.agentsvault.navigation.bottom.BottomItem
 
 @Composable
 fun BottomBar(navHost: NavHostController) {
     val items = listOf(
         BottomItem(
-            title = "Agentes",
-            route = "main",
+            title = stringResource(id = R.string.bottombar_title_agents),
+            route = Routes.Agents.route,
             icon = Icons.Default.Groups
         ),
 
         BottomItem(
-            title = "Mapas",
-            route = "maps",
+            title = stringResource(id = R.string.bottombar_title_maps),
+            route = Routes.Maps.route,
             icon = Icons.Default.Map
         ),
 
         BottomItem(
-            title = "Agentes Favoritos",
-            route = "favorites",
+            title = stringResource(id = R.string.bottombar_title_agents_favorites),
+            route = Routes.Favorites.route,
             icon = Icons.Default.Star
         )
     )
@@ -47,7 +50,7 @@ fun BottomBar(navHost: NavHostController) {
                 selected = currentRoute == item.route,
                 onClick = {
                     navHost.navigate(item.route) {
-                        popUpTo("main") {
+                        popUpTo(route = Routes.Agents.route) {
                             saveState = true
                         }
                         launchSingleTop = true

@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.gblrod.agentsvault.components.BottomBar
 import com.gblrod.agentsvault.components.TopBar
 import com.gblrod.agentsvault.navigation.NavigationGraph
+import com.gblrod.agentsvault.navigation.Routes
 import com.gblrod.agentsvault.navigation.drawer.DrawerContent
 import com.gblrod.agentsvault.presentation.agents.components.SearchOptions
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
@@ -98,9 +99,9 @@ class MainActivity : ComponentActivity() {
                                         },
                                         onSearchClick = {
                                             searchType = when (navController.currentDestination?.route) {
-                                                "maps" -> SearchOptions.MAP
-                                                "main" -> SearchOptions.AGENT
-                                                "favorites" -> SearchOptions.AGENT
+                                                Routes.Maps.route -> SearchOptions.MAP
+                                                Routes.Agents.route -> SearchOptions.AGENT
+                                                Routes.Favorites.route -> SearchOptions.AGENT
                                                 else -> SearchOptions.NONE
                                             }
                                         },

@@ -2,6 +2,7 @@ package com.gblrod.agentsvault.presentation.maps.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gblrod.agentsvault.R
 import com.gblrod.agentsvault.dto.MapDto
 import com.gblrod.agentsvault.dto.MapsUiState
 import com.gblrod.agentsvault.network.API
@@ -56,14 +57,17 @@ class MapsViewModel(
                     _mapsUiState.value = MapsUiState.Success(cachedMaps)
                 } else {
                     _mapsUiState.value =
-                        MapsUiState.Error("Erro ao carregar Mapas! \nSem acesso a internet. Verifique sua conexão.")
+                        MapsUiState.Error(messageResId = R.string.maps_ui_state_ioexception)
                 }
             } catch (e: HttpException) {
-                _mapsUiState.value = MapsUiState.Error("Erro do servidor: ${e.code()}")
+                _mapsUiState.value = MapsUiState.Error(
+                    messageResId = R.string.maps_ui_state_httpexception,
+                    code = e.code()
+                )
 
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
-                _mapsUiState.value = MapsUiState.Error("Ocorreu um erro inesperado!")
+                _mapsUiState.value = MapsUiState.Error(messageResId = R.string.maps_ui_state_cancellationexception)
             }
         }
     }
