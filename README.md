@@ -24,6 +24,7 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) — Persistência de dados local utilizada para salvar agentes favoritados.
 - [Splash Screen](https://developer.android.com/develop/ui/views/launch/splash-screen) — Tela de abertura com logo e fundo para melhorar a experiência inicial do app.
 - [Navigation](https://developer.android.com/jetpack/compose/navigation) — Gerenciamento de navegação entre telas.
+- Gerenciamento de textos com `strings.xml` — Centralização dos textos do app, facilitando manutenção e futuras traduções
 
 ## Funcionalidades
 
