@@ -67,7 +67,7 @@ fun ThemeMenu(
                     ) {
                         RadioButton(
                             selected = selectedTheme == theme,
-                            onClick = {  },
+                            onClick = { selectedTheme = theme },
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = ContainerButtonDialog
                             )
