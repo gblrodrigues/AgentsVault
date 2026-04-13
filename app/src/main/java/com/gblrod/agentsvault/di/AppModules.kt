@@ -2,6 +2,7 @@ package com.gblrod.agentsvault.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.gblrod.agentsvault.language.viewmodel.LanguageViewModel
 import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.network.API
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
@@ -43,6 +44,7 @@ val appModules = module {
     viewModelOf(constructor = ::ThemeViewModel)
     viewModelOf(constructor = ::MapsViewModel)
     viewModelOf(constructor = ::RetryViewModel)
+    viewModelOf(constructor = ::LanguageViewModel)
     viewModel {
         AgentsViewModel(
             prefsDataStore = get(),

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Star
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.gblrod.agentsvault.R
+import com.gblrod.agentsvault.language.viewmodel.LanguageViewModel
 import com.gblrod.agentsvault.navigation.Routes
 import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
 
@@ -35,11 +37,15 @@ import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
 fun DrawerContent(
     navHost: NavHostController,
     onItemClick: () -> Unit,
-    themeViewModel: ThemeViewModel
+    themeViewModel: ThemeViewModel,
+    languageViewModel: LanguageViewModel
 ) {
     val currentRoute = navHost.currentBackStackEntryAsState().value?.destination?.route
     var showThemeDialog by remember { mutableStateOf(false) }
     val theme = themeViewModel.theme.collectAsState().value!!.label
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    val language = languageViewModel.language.collectAsState().value
+
     val items = listOf(
         DrawerItem(
             label = stringResource(id = R.string.drawer_item_label_agents),
@@ -106,6 +112,47 @@ fun DrawerContent(
             }
         )
     }
+
+    NavigationDrawerItem(
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Language,
+                contentDescription = stringResource(id = R.string.drawer_item_language_cd),
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        },
+        label = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.drawer_item_label_language),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                language?.let {
+                    Text(
+                        text = stringResource(id = it.label),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        },
+        selected = false,
+        onClick = {
+            showLanguageDialog = true
+        }
+    )
+    if (showLanguageDialog) {
+        LanguageMenu(
+            languageViewModel = languageViewModel,
+            onDismiss = {
+                showLanguageDialog = false
+            }
+        )
+    }
+
     items.forEach { item ->
         NavigationDrawerItem(
             icon = {

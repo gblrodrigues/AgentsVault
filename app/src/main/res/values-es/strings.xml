@@ -22,6 +22,14 @@
     <string name="theme_lightmode">Claro</string>
     <string name="theme_system">Sistema</string>
 
+    <!-- Language -->
+    <string name="language_dialog_title">Selecciona un idioma</string>
+    <string name="language_dialog_confirm">Aplicar</string>
+    <string name="language_dialog_dismiss">Cancelar</string>
+    <string name="language_portuguese">Português (Brasil)</string>
+    <string name="language_english">English</string>
+    <string name="language_espanhol">Español</string>
+
     <!-- Snackbar -->
     <string name="snackbar_undo">Deshacer</string>
 
@@ -47,10 +55,12 @@
     <!-- NavigationDrawer -->
     <string name="drawer_title">Agents Vault</string>
     <string name="drawer_item_themes_cd">Temas</string>
+    <string name="drawer_item_language_cd">Idiomas</string>
     <string name="drawer_item_label_agents">Agentes</string>
     <string name="drawer_item_label_agents_favorites">Agentes Favoritos</string>
     <string name="drawer_item_label_maps">Mapas</string>
     <string name="drawer_item_label_themes">Temas</string>
+    <string name="drawer_item_label_language">Idiomas</string>
 
     <!-- BottomSheet -->
     <string name="cd_agent_ability_icon">Icono da habilidade</string>

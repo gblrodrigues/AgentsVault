@@ -1,81 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">AgentsVault</string>
 
     <!-- Favorites -->
-    <string name="favorite_remove_title">Desfavoritar %1$s</string>
-    <string name="favorite_remove_description">Tem certeza que quer remover %1$s dos seus favoritos?</string>
-    <string name="favorite_remove_success">Agente %1$s desfavoritado!</string>
-    <string name="favorite_dialog_confirm">Confirmar</string>
-    <string name="favorite_dialog_dismiss">Cancelar</string>
-    <string name="cd_favorite_toggle">Ícone de favoritar</string>
-    <string name="cd_favorite_empty_icon">Ícone sem favoritos</string>
-    <string name="cd_favorite_back_button_icon">Ícone de voltar</string>
-    <string name="cd_favorite_back_button">Favoritar Agentes</string>
-    <string name="favorite_empty_list_title">Sem agente favorito</string>
-    <string name="favorite_empty_list_description" tools:ignore="Typos">Quando você favoritar agentes, \neles aparecerão aqui.</string>
+    <string name="favorite_remove_title">Remove %1$s from favorites</string>
+    <string name="favorite_remove_description">Are you sure you want to remove %1$s from your favorites?</string>
+    <string name="favorite_remove_success">Agent %1$s unfavorited!</string>
+    <string name="favorite_dialog_confirm">Confirm</string>
+    <string name="favorite_dialog_dismiss">Cancel</string>
+    <string name="cd_favorite_toggle">Icon of to favorite</string>
+    <string name="cd_favorite_empty_icon">Icon of no favorite</string>
+    <string name="cd_favorite_back_button_icon">Icon of back</string>
+    <string name="cd_favorite_back_button">Favorite Agents</string>
+    <string name="favorite_empty_list_title">No favorite agents</string>
+    <string name="favorite_empty_list_description" tools:ignore="Typos">When you favorite agents, they will appear here.</string>
 
     <!-- Theme -->
-    <string name="theme_dialog_title">Escolha um tema</string>
-    <string name="theme_dialog_confirm">Aplicar</string>
-    <string name="theme_dialog_dismiss">Cancelar</string>
-    <string name="theme_darkmode">Escuro</string>
-    <string name="theme_lightmode">Claro</string>
-    <string name="theme_system">Sistema</string>
+    <string name="theme_dialog_title">Choose a theme</string>
+    <string name="theme_dialog_confirm">Apply</string>
+    <string name="theme_dialog_dismiss">Cancel</string>
+    <string name="theme_darkmode">Dark</string>
+    <string name="theme_lightmode">Light</string>
+    <string name="theme_system">System</string>
+
+    <!-- Language -->
+    <string name="language_dialog_title">Choose a language</string>
+    <string name="language_dialog_confirm">Apply</string>
+    <string name="language_dialog_dismiss">Cancel</string>
+    <string name="language_portuguese">Português (Brasil)</string>
+    <string name="language_english">English</string>
+    <string name="language_espanhol">Español</string>
 
     <!-- Snackbar -->
-    <string name="snackbar_undo">Desfazer</string>
+    <string name="snackbar_undo">Undo</string>
 
     <!-- Buttons -->
-    <string name="button_show_abilities">Ver Habilidades</string>
-    <string name="button_retry">Tentar novamente</string>
+    <string name="button_show_abilities">View abilities</string>
+    <string name="button_retry">Try again</string>
 
     <!-- BottomBar -->
-    <string name="bottombar_title_agents">Agentes</string>
-    <string name="bottombar_title_maps">Mapas</string>
-    <string name="bottombar_title_agents_favorites">Agentes Favoritos</string>
+    <string name="bottombar_title_agents">Agents</string>
+    <string name="bottombar_title_maps">Maps</string>
+    <string name="bottombar_title_agents_favorites">Favorites Agents</string>
 
     <!-- Loading Screen -->
-    <string name="label_loading" tools:ignore="TypographyEllipsis">Carregando...</string>
+    <string name="label_loading" tools:ignore="TypographyEllipsis">Loading...</string>
 
     <!-- TopBar -->
     <string name="cd_navigation_icon">Menu</string>
     <string name="topbar_title">Agents Vault</string>
-    <string name="topbar_search_cd">Ícone de Pesquisa</string>
-    <string name="topbar_agent_selected_cd">Imagem do agente selecionado</string>
-    <string name="topbar_agent_no_selected_cd">Ícone padrão</string>
+    <string name="topbar_search_cd">Icon of Search</string>
+    <string name="topbar_agent_selected_cd">Selected agent image</string>
+    <string name="topbar_agent_no_selected_cd">Icon default</string>
 
     <!-- NavigationDrawer -->
     <string name="drawer_title">Agents Vault</string>
-    <string name="drawer_item_themes_cd">Temas</string>
-    <string name="drawer_item_label_agents">Agentes</string>
-    <string name="drawer_item_label_agents_favorites">Agentes Favoritos</string>
-    <string name="drawer_item_label_maps">Mapas</string>
-    <string name="drawer_item_label_themes">Temas</string>
+    <string name="drawer_item_themes_cd">Themes</string>
+    <string name="drawer_item_language_cd">Languages</string>
+    <string name="drawer_item_label_agents">Agents</string>
+    <string name="drawer_item_label_agents_favorites">Agents Favorites</string>
+    <string name="drawer_item_label_maps">Maps</string>
+    <string name="drawer_item_label_themes">Themes</string>
+    <string name="drawer_item_label_language">Languages</string>
 
     <!-- BottomSheet -->
-    <string name="cd_agent_ability_icon">Ícone da habilidade</string>
+    <string name="cd_agent_ability_icon">Abilities icon</string>
 
     <!-- SearchBar -->
-    <string name="searchbar_placeholder_empty">Vazio</string>
-    <string name="searchbar_cd_leading_icon">Ícone de Voltar</string>
-    <string name="searchbar_cd_trailing_icon">Ícone de Limpar campo</string>
+    <string name="searchbar_placeholder_empty">Empty</string>
+    <string name="searchbar_cd_leading_icon">Back icon</string>
+    <string name="searchbar_cd_trailing_icon">Clear text icon</string>
 
     <!-- AgentsUiState -->
-    <string name="agents_ui_state_ioexception">Erro ao carregar Agentes! \nSem acesso a internet. Verifique sua conexão.</string>
-    <string name="agents_ui_state_httpexception">Erro do servidor: %1$d</string>
-    <string name="agents_ui_state_cancellationexception">Ocorreu um erro inesperado!</string>
+    <string name="agents_ui_state_ioexception">Error loading Agents! \nNo internet access. Check your connection.</string>
+    <string name="agents_ui_state_httpexception">Server error: %1$d</string>
+    <string name="agents_ui_state_cancellationexception">An unexpected error occurred!</string>
 
     <!-- MapsUiState -->
-    <string name="maps_ui_state_ioexception">Erro ao carregar Mapas! \nSem acesso a internet. Verifique sua conexão.</string>
-    <string name="maps_ui_state_httpexception">Erro do servidor: %1$d</string>
-    <string name="maps_ui_state_cancellationexception">Ocorreu um erro inesperado!</string>
+    <string name="maps_ui_state_ioexception">Error loading Maps! \nNo internet access. Check your connection.</string>
+    <string name="maps_ui_state_httpexception">Server error: %1$d</string>
+    <string name="maps_ui_state_cancellationexception">An unexpected error occurred!</string>
 
     <!-- Agents -->
-    <string name="cd_agent_image">Imagem do agente</string>
-    <string name="cd_agent_role_icon">Ícone da função do agente</string>
+    <string name="cd_agent_image">Image of agent</string>
+    <string name="cd_agent_role_icon">Agent role Icon</string>
 
     <!-- Maps -->
-    <string name="cd_map_image_display">Imagem do mapa (Display)</string>
-    <string name="cd_map_image_splash">Imagem do mapa (Splash)</string>
-    <string name="map_not_available">Mapa não disponível</string>
+    <string name="cd_map_image_display">Image of Map (Display)</string>
+    <string name="cd_map_image_splash">Image of Map (Splash)</string>
+    <string name="map_not_available">Map not available</string>
 </resources>

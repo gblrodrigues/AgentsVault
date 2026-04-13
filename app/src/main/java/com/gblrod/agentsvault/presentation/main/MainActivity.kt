@@ -25,22 +25,43 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.rememberNavController
 import com.gblrod.agentsvault.components.BottomBar
 import com.gblrod.agentsvault.components.TopBar
+import com.gblrod.agentsvault.core.locale.LanguageManager
+import com.gblrod.agentsvault.language.viewmodel.LanguageViewModel
+import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.navigation.NavigationGraph
 import com.gblrod.agentsvault.navigation.Routes
 import com.gblrod.agentsvault.navigation.drawer.DrawerContent
 import com.gblrod.agentsvault.presentation.agents.components.SearchOptions
 import com.gblrod.agentsvault.presentation.agents.viewmodel.AgentsViewModel
 import com.gblrod.agentsvault.presentation.theme.AgentTheme
+import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
 import com.gblrod.agentsvault.ui.theme.BackgroundColorOne
 import com.gblrod.agentsvault.ui.theme.BackgroundColorTwo
-import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 
 
 val Context.dataStore by preferencesDataStore(name = "agent_favorite")
 
 class MainActivity : ComponentActivity() {
+
+    private val prefsDataStore: PrefsDataStore by inject()
+
+    override fun attachBaseContext(newBase: Context) {
+        val context = runBlocking {
+            val savedLanguage = try {
+                prefsDataStore.getLanguageOnce()
+            } catch (e: Exception) {
+                null
+            }
+
+            val locale = LanguageManager.resolveLocale(savedLanguage)
+            LanguageManager.applyLocale(newBase, locale)
+        }
+        super.attachBaseContext( context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,20 +76,24 @@ class MainActivity : ComponentActivity() {
                     )
                 )
             }
+
             val themeViewModel: ThemeViewModel = koinViewModel()
+            val languageViewModel: LanguageViewModel = koinViewModel()
             val agentsViewModel: AgentsViewModel = koinViewModel()
+
             val theme by themeViewModel.theme.collectAsState()
+
             val drawerState = rememberDrawerState(
                 initialValue = DrawerValue.Closed
             )
+
             val scope = rememberCoroutineScope()
             val navController = rememberNavController()
             var searchType by remember { mutableStateOf(SearchOptions.NONE) }
 
             if (theme != null) {
-                AgentTheme(
-                    themeOption = theme!!
-                ) {
+                AgentTheme(themeOption = theme!!) {
+
                     ModalNavigationDrawer(
                         drawerState = drawerState,
                         drawerContent = {
@@ -80,30 +105,33 @@ class MainActivity : ComponentActivity() {
                                             drawerState.close()
                                         }
                                     },
-                                    themeViewModel = themeViewModel
+                                    themeViewModel = themeViewModel,
+                                    languageViewModel = languageViewModel
                                 )
                             }
                         }
-                    )
-                    {
+                    ) {
                         Scaffold(
                             topBar = {
                                 if (searchType == SearchOptions.NONE) {
                                     TopBar(
                                         onOpenDrawer = {
                                             scope.launch {
-                                                drawerState.apply {
-                                                    if (isClosed) open() else close()
+                                                if (drawerState.isClosed) {
+                                                    drawerState.open()
+                                                } else {
+                                                    drawerState.close()
                                                 }
                                             }
                                         },
                                         onSearchClick = {
-                                            searchType = when (navController.currentDestination?.route) {
-                                                Routes.Maps.route -> SearchOptions.MAP
-                                                Routes.Agents.route -> SearchOptions.AGENT
-                                                Routes.Favorites.route -> SearchOptions.AGENT
-                                                else -> SearchOptions.NONE
-                                            }
+                                            searchType =
+                                                when (navController.currentDestination?.route) {
+                                                    Routes.Maps.route -> SearchOptions.MAP
+                                                    Routes.Agents.route -> SearchOptions.AGENT
+                                                    Routes.Favorites.route -> SearchOptions.AGENT
+                                                    else -> SearchOptions.NONE
+                                                }
                                         },
                                         viewModel = agentsViewModel
                                     )
@@ -111,17 +139,16 @@ class MainActivity : ComponentActivity() {
                             },
                             bottomBar = {
                                 if (searchType == SearchOptions.NONE) {
-                                    BottomBar(
-                                        navHost = navController
-                                    )
+                                    BottomBar(navHost = navController)
                                 }
-                            },
+                            }
                         ) { paddingValues ->
 
-                            Box(modifier = Modifier
-                                .fillMaxSize()
-                                .background(brush = backgroundGradient)) {
-
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(brush = backgroundGradient)
+                            ) {
                                 NavigationGraph(
                                     navHost = navController,
                                     paddingValues = paddingValues,
