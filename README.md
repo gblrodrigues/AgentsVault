@@ -47,13 +47,15 @@ Criei o projeto para aplicar na prática conceitos que venho estudando, como con
 
 ### Gerais
 * Tratamento de estados de carregamento e erro com opção de retry
-* Suporte a temas (Light, Dark e System) com persistência usando DataStore  
+* Suporte a temas (Light, Dark e System) com persistência usando DataStore
+* Escolha de idioma (Inglês, Espanhol e Português) com persistência usando DataStore
+* Detecção automática do idioma do dispositivo com fallback para `Inglês`
 * Splash Screen inicial do aplicativo  
 * Interface moderna com gradientes personalizados  
 
 ## Demonstração
 Abaixo irei disponibilizar um vídeo mostrando como o aplicativo está:
-> https://github.com/user-attachments/assets/e5c18a96-b015-426b-a0cc-9beae4b39d24
+> https://github.com/user-attachments/assets/4350500f-9049-4d65-a1f9-e39afee11116
 
 ## Tomadas de Decisões
 
@@ -70,6 +72,11 @@ Os dados dos agentes e mapas são obtidos por meio de uma API pública da comuni
 ### Gerenciamento de Estado de UI (UiState)
 Para lidar com os estados da tela (carregando, sucesso e erro), utilizei uma abordagem com sealed class (UiState) junto com StateFlow.
 Com isso, a interface reage automaticamente às mudanças de estado, deixando o código mais organizado e fácil de entender.
+
+### Sistema de Internacionalização (i18n)
+Suporte a múltiplos idiomas (Inglês, Espanhol e Português), com detecção automática do idioma do dispositivo e opção de troca manual no app. 
+Para garantir compatibilidade com versões mais antigas do Android (API 30), utilizei o `attachBaseContext` para aplicar o locale. 
+Como meu dispositivo de teste é mais antigo, essa abordagem acabou sendo necessária.
 
 ### Carregamento de Imagens
 Utilizei a biblioteca Coil para carregar imagens via URL de forma assíncrona, garantindo uma experiência mais fluida e melhor desempenho na renderização das imagens.
