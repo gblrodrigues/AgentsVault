@@ -5,7 +5,6 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -60,21 +59,20 @@ fun BottomBar(navHost: NavHostController) {
                 icon = {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = item.title,
-                        tint = MaterialTheme.colorScheme.onSurface
+                        contentDescription = item.title
                     )
                 },
                 label = {
                     Text(
-                        text = item.title,
-                        color = MaterialTheme.colorScheme.onSurface
+                        text = item.title
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    selectedIconColor = Color.White,
+                    unselectedIconColor = Color.LightGray,
+                    unselectedTextColor = Color.LightGray,
+                    selectedTextColor = Color.White,
+                    indicatorColor = Color.Transparent
                 )
             )
         }

@@ -13,7 +13,7 @@
     <string name="cd_favorite_back_button_icon">Icon of back</string>
     <string name="cd_favorite_back_button">Favorite Agents</string>
     <string name="favorite_empty_list_title">No favorite agents</string>
-    <string name="favorite_empty_list_description" tools:ignore="Typos">When you favorite agents, they will appear here.</string>
+    <string name="favorite_empty_list_description" tools:ignore="Typos">When you favorite agents, \nthey will appear here.</string>
 
     <!-- Theme -->
     <string name="theme_dialog_title">Choose a theme</string>

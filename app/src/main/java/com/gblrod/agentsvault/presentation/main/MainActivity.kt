@@ -25,7 +25,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.rememberNavController
 import com.gblrod.agentsvault.components.BottomBar
 import com.gblrod.agentsvault.components.TopBar
-import com.gblrod.agentsvault.core.locale.LanguageManager
+import com.gblrod.agentsvault.core.manager.LanguageManager
 import com.gblrod.agentsvault.language.viewmodel.LanguageViewModel
 import com.gblrod.agentsvault.local.PrefsDataStore
 import com.gblrod.agentsvault.navigation.NavigationGraph
@@ -42,25 +42,20 @@ import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 
-
 val Context.dataStore by preferencesDataStore(name = "agent_favorite")
-
 class MainActivity : ComponentActivity() {
-
     private val prefsDataStore: PrefsDataStore by inject()
 
     override fun attachBaseContext(newBase: Context) {
         val context = runBlocking {
-            val savedLanguage = try {
+            val savedLanguage = runCatching {
                 prefsDataStore.getLanguageOnce()
-            } catch (e: Exception) {
-                null
-            }
+            }.getOrNull()
 
             val locale = LanguageManager.resolveLocale(savedLanguage)
             LanguageManager.applyLocale(newBase, locale)
         }
-        super.attachBaseContext( context)
+        super.attachBaseContext(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,20 +75,14 @@ class MainActivity : ComponentActivity() {
             val themeViewModel: ThemeViewModel = koinViewModel()
             val languageViewModel: LanguageViewModel = koinViewModel()
             val agentsViewModel: AgentsViewModel = koinViewModel()
-
             val theme by themeViewModel.theme.collectAsState()
-
-            val drawerState = rememberDrawerState(
-                initialValue = DrawerValue.Closed
-            )
-
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             val scope = rememberCoroutineScope()
             val navController = rememberNavController()
-            var searchType by remember { mutableStateOf(SearchOptions.NONE) }
+            var searchType by remember { mutableStateOf(value = SearchOptions.NONE) }
 
             if (theme != null) {
                 AgentTheme(themeOption = theme!!) {
-
                     ModalNavigationDrawer(
                         drawerState = drawerState,
                         drawerContent = {
@@ -143,7 +132,6 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         ) { paddingValues ->
-
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()

@@ -10,7 +10,6 @@ import com.gblrod.agentsvault.presentation.theme.ThemeOptions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlin.collections.get
 
 private val toggleFavorite = stringSetPreferencesKey(name = "toggle_favorite")
 private val themeKey = stringPreferencesKey(name = "theme")

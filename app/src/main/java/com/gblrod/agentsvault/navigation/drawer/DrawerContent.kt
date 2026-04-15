@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.gblrod.agentsvault.R
+import com.gblrod.agentsvault.core.util.orDeviceDefault
 import com.gblrod.agentsvault.language.viewmodel.LanguageViewModel
 import com.gblrod.agentsvault.navigation.Routes
 import com.gblrod.agentsvault.presentation.theme.viewmodel.ThemeViewModel
@@ -45,6 +46,7 @@ fun DrawerContent(
     val theme = themeViewModel.theme.collectAsState().value!!.label
     var showLanguageDialog by remember { mutableStateOf(false) }
     val language = languageViewModel.language.collectAsState().value
+    val effectiveLanguage = language.orDeviceDefault()
 
     val items = listOf(
         DrawerItem(
@@ -131,12 +133,10 @@ fun DrawerContent(
                     text = stringResource(id = R.string.drawer_item_label_language),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                language?.let {
-                    Text(
-                        text = stringResource(id = it.label),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
+                Text(
+                    text = stringResource(id = effectiveLanguage.label),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         },
         selected = false,
